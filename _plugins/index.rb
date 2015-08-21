@@ -10,11 +10,12 @@ module Docs
           # Find the page.
           page = site.pages.detect {|page| page.relative_path == item['path']}
           if page
-            index['url'] = page.url
             index['title'] = page['title']
+            index['url'] = page.url
           else
             # If we didn't find a corrosponding page...
-            index['title'] = 'No Page Found'
+            index['title'] = item['title']
+            index['url'] = item['path']
           end
 
           # Build out contents indices.

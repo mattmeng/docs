@@ -13,3 +13,9 @@
     - title: FAQ
       contents:
         - path: /git/stories.md
+- title: Core Engineering
+  contents:
+    - title: Documentation
+      contents:
+        - path: /core_docs
+          title: Supportability Docs

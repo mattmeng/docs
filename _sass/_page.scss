@@ -1,0 +1,164 @@
+/**
+ * View Components
+ */
+#viewer {
+  position: absolute;
+  border: 0px;
+  left: 260px;
+  width: calc(100% - 260px);
+  height: 100%;
+  overflow: auto;
+  color: #555;
+  font-family: 'inconsolata';
+  font-size: $base-font-size;
+  line-height: 18px;
+  padding: 30px 20px;
+
+  header {
+    h1 {
+      margin: 0px;
+    }
+
+    h3 {
+      margin: 10px 0px;
+
+      .email {
+        font-style: italic;
+      }
+    }
+  }
+
+  a {
+    color: #1184CE;
+  }
+
+  h1 {
+    color: #333;
+    font-size: 25px;
+    font-weight: normal;
+
+    margin-top: 10px;
+  }
+
+  h2 {
+    color: #4B0;
+    font-size: 18px;
+    font-weight: normal;
+
+    margin-top: 40px;
+  }
+
+  h3 {
+    color: #000;
+    font-size: 16px;
+    font-weight: normal;
+
+    margin-top: 30px;
+  }
+
+  div {
+    /* padding-left: 30px; */
+    margin-bottom: 20px;
+  }
+
+  div.desc {
+    padding-left: 0px;
+  }
+
+  code.highlighter-rouge {
+    font-family: $base-font-family;
+    font-size: $base-font-size;
+
+    color: firebrick;
+    padding: 0;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    margin: 0;
+    background-color: rgba(0,0,0,0.04);
+    border-radius: 3px;
+  }
+
+  th {
+    padding: 10px;
+    text-decoration: underline;
+  }
+  td {
+    text-align: center;
+  }
+
+  table code {
+    padding: 2px;
+    margin: 0px;
+    width: auto;
+  }
+
+  strong {
+    color: #000;
+    font-weight: normal;
+  }
+
+  #button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 8px;
+    color: #fff;
+    background-color: #555;
+    opacity: 0.5;
+
+    :hover {
+      cursor: pointer;
+      opacity: 1;
+    }
+  }
+
+  a.permalink {
+    float: right;
+    margin-left: 5px;
+  }
+
+  dl {
+    dt {
+      font-weight: bold;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+
+/**
+ * Mobile Components
+ */
+@media all and ( max-width: 640px ) {
+  h1{
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  #content{
+    position: absolute;
+    left: 0;
+    top: 90px;
+    right: 0;
+    bottom: 0;
+    font-size: 17px;
+    line-height: 22px;
+    overflow: auto;
+  }
+
+  #viewer{
+    position: absolute;
+    left: 0;
+    top: 56px;
+    width: 100%;
+    height: calc(100% - 56px);
+  }
+}

@@ -1,20 +1,20 @@
 ---
 title: Stories for Working with the Repository
-layout: default
+author: Matt Meng
+email: matt.meng@intel.com
+layout: page
 ---
-
-## Stories for Working with the Repository
 
 This document describes several stories in an attempt to help Developers and Release Managers effectively manage their code and standardize our use of branching and working with the repository.
 
-### Caveats
+## Caveats
 
 * Before every action, make sure all the appropriate branches are up to date and in sync with the remote.
 * Create two aliases in your Git config file (`~/.gitconfig` on Linux and Mac OS X, `%HOMEPATH%/.gitconfig` on Windows).  Place this under the `[alias]` section:
   * `nb = !sh -c 'git checkout -b $1 && git push -u origin $1' -`
   * `db = !sh -c 'git branch -D $1 && git push --delete origin $1' -`
 
-### Terminology
+## Terminology
 
 <dl>
   <dt>&lt;required_value&gt;</dt>
@@ -23,7 +23,7 @@ This document describes several stories in an attempt to help Developers and Rel
   <dd>An optional value, usually specified in a previous instruction.</dd>
 </dl>
 
-### Naming Conventions
+## Naming Conventions
 
 <dl>
   <dt>master/&lt;x.y&gt;</dt>
@@ -40,7 +40,7 @@ This document describes several stories in an attempt to help Developers and Rel
   <dd>A release branch represents a releasable increment.  They are namespaced using the version and can optionally include a maintenance release number preceded by an underscore. Release branches are code frozen, so reviews are required to submit commits to them.</dd>
 </dl>
 
-### Story Summary
+## Story Summary
 
 * [Development](#development)
   * Developer Stories
