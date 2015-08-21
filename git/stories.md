@@ -72,7 +72,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *Create a new branch and work on it:*
 
-![Create a new branch and work on it](images/dev_1.png)
+![Create a new branch and work on it](/files/dev_1.png)
 
 
 1. Topic branches should be based off of the development branch: `git checkout development`
@@ -81,7 +81,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *Regularly merge down changes from development:*
 
-![Regularly merge down changes from development](images/dev_2.png)
+![Regularly merge down changes from development](/files/dev_2.png)
 
 1. Checkout the topic branch: `git checkout topic/123456`
 2. Merge development into the topic branch: `git merge development`
@@ -89,7 +89,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *When you're done and the topic is tested and good:*
 
-![When you're done and the topic is tested and good](images/dev_3.png)
+![When you're done and the topic is tested and good](/files/dev_3.png)
 
 1. Checkout the topic branch: `git checkout topic/123456`
 2. Merge in changes from the development branch: `git merge development`
@@ -105,7 +105,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *At this point, there will be a release branch corrosponding to the appropriate version.*
 
-![At this point, there will be a release branch corrosponding to the appropriate version.](images/dev_4.png)
+![At this point, there will be a release branch corrosponding to the appropriate version.](/files/dev_4.png)
 
 1. Checkout the release branch: `git checkout release/9.5.1`
 2. Create a new topic branch: `git nb topic/654321`
@@ -114,7 +114,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *Merge those fixes into the development and release branches:*
 
-![Merge those fixes into the development and release branches](images/dev_5.png)
+![Merge those fixes into the development and release branches](/files/dev_5.png)
 
 1. Create a merge request in Gitlab using `topic/654321` as the source, `release/9.5.1` as the target and your **Scrum Master** as the assignee. (See [Create a Merge Request in Gitlab](#create-a-merge-request-in-gitlab))
 2. Checkout the development branch: `git checkout development`
@@ -129,7 +129,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *Create a new release branch and protect it:*
 
-![Create a new release branch and protect it](images/dev_6.png)
+![Create a new release branch and protect it](/files/dev_6.png)
 
 1. Checkout the development branch: `git checkout development`
 2. Create a new release branch: `git nb release/9.5.1`
@@ -147,7 +147,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *If this is a release for an already existing line (e.g. master/9.5 exists and the new version is 9.5.1), merge the release branch into the existing master branch:*
 
-![Existing Line](images/dev_7.png)
+![Existing Line](/files/dev_7.png)
 
 1. Checkout the development branch: `git checkout development`
 2. Merge the release branch into the development branch: `git merge release/9.5.1`
@@ -159,7 +159,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *If this is a release for a new line (e.g. the new version is 9.6.0 and no master/9.6 exists), create a new master line and merge the release branch into it:*
 
-![New Line](images/dev_8.png)
+![New Line](/files/dev_8.png)
 
 1. Checkout the development branch: `git checkout development`
 2. Merge the release branch into the development branch: `git merge release/9.6.0`
@@ -178,7 +178,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *Create a new branch and work on it:*
 
-![Create a new branch and work on it](images/patch_1.png)
+![Create a new branch and work on it](/files/patch_1.png)
 
 1. These patch branches should be based off of the appropriate patch development branch: `git checkout patch/9.5/development`
 2. Create a new patch branch: `git nb patch/9.5/123456`
@@ -187,7 +187,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *When you're done and the fix is tested and good:*
 
-![When you're done and the fix is tested and good](images/patch_2.png)
+![When you're done and the fix is tested and good](/files/patch_2.png)
 
 1. Checkout the patch branch: `git checkout patch/9.5/123456`
 2. Merge in changes from the patch development branch: `git merge patch/9.5/development`
@@ -203,7 +203,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *Get the SHA for the commit you want to copy and cherry-pick it onto the target branch:*
 
-![Get the SHA for the commit you want to copy and cherry-pick it onto the target branch](images/patch_3.png)
+![Get the SHA for the commit you want to copy and cherry-pick it onto the target branch](/files/patch_3.png)
 
 1. Find the SHA of the commit in question: `git log patch/9.5/123456`
 2. Let's say the commit in question is `1a2b3c4` (Only the first 7 chars are needed).
@@ -216,7 +216,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *Create a new branch and work on it:*
 
-![Create a new branch and work on it](images/patch_4.png)
+![Create a new branch and work on it](/files/patch_4.png)
 
 1. These patch branches should be based off of the appropriate master branch: `git checkout master/9.5`
 2. Create a new patch branch: `git nb patch/9.5/456789`
@@ -225,7 +225,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *When you're done and the fix is tested and good:*
 
-![When you're done and the fix is tested and good](images/patch_5.png)
+![When you're done and the fix is tested and good](/files/patch_5.png)
 
 1. Create a merge request in Gitlab using `patch/9.5/456789` as the source, `master/9.5` as the target and **Adam Hanny** as the assignee. (See [Create a Merge Request in Gitlab](#create-a-merge-request-in-gitlab))
 2. Checkout the appropriate patch development branch: `git checkout patch/9.5/development`
@@ -239,7 +239,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *At this point, there will be a release branch corrosponding to the appropriate version.*
 
-![At this point, there will be a release branch corrosponding to the appropriate version.](images/patch_6.png)
+![At this point, there will be a release branch corrosponding to the appropriate version.](/files/patch_6.png)
 
 1. Checkout the release branch: `git checkout release/9.5.0_MR5`
 2. Create a new branch: `git nb patch/9.5/654321`
@@ -248,7 +248,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *Merge those fixes into the patch development and release branches:*
 
-![Merge those fixes into the patch development and release branches](images/patch_7.png)
+![Merge those fixes into the patch development and release branches](/files/patch_7.png)
 
 1. Create a merge request in Gitlab using `patch/9.5/654321` as the source, `release/9.5.0_MR5` as the target and **Adam Hanny** as the assignee. (See [Create a Merge Request in Gitlab](#create-a-merge-request-in-gitlab))
 2. Checkout the appropriate patch development branch: `git checkout patch/9.5/development`
@@ -263,7 +263,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *Create a new release branch and protect it:*
 
-![Create a new release branch and protect it](images/patch_8.png)
+![Create a new release branch and protect it](/files/patch_8.png)
 
 1. Checkout the appropriate patch development branch: `git checkout patch/9.5/development`
 2. Create a new release branch: `git nb release/9.5.0_MR5`
@@ -281,7 +281,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *Merge the release back into the patch development branch and the master branch:*
 
-![Merge the release back into the patch development branch and the master branch](images/patch_10.png)
+![Merge the release back into the patch development branch and the master branch](/files/patch_10.png)
 
 1. Checkout the patch development branch: `git checkout patch/9.5/development`
 2. Merge the release branch into the patch development branch: `git merge release/9.5.0_MR5`
@@ -306,7 +306,7 @@ This document describes several stories in an attempt to help Developers and Rel
 
 *Tag the new commit:*
 
-![Tag the new commit](images/patch_11.png)
+![Tag the new commit](/files/patch_11.png)
 
 1. Checkout the appropriate master branch: `git checkout master/9.5`
 2. Pull down the new changes: `git pull`
