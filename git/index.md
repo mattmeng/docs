@@ -1,5 +1,6 @@
 ---
+title: Git DVCS
 layout: default
-my_var: 'hello'
 ---
 
+git stuff

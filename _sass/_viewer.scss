@@ -1,0 +1,41 @@
+/**
+ * View Components
+ */
+#viewer {
+  position: absolute;
+  border: 0px;
+  left: 260px;
+  width: calc(100% - 260px);
+  height: 100%;
+  overflow: auto;
+}
+
+
+/**
+ * Mobile Components
+ */
+@media all and ( max-width: 640px ) {
+  h1{
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  #content{
+    position: absolute;
+    left: 0;
+    top: 90px;
+    right: 0;
+    bottom: 0;
+    font-size: 17px;
+    line-height: 22px;
+    overflow: auto;
+  }
+
+  #viewer{
+    position: absolute;
+    left: 0;
+    top: 56px;
+    width: 100%;
+    height: calc(100% - 56px);
+  }
+}
