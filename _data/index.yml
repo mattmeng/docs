@@ -3,13 +3,9 @@
   contents:
     - title: Basics
       contents:
-        - path: /automation/index.md
+        - path: /automation/index.adoc
 - title: Git
   contents:
-    - title: Basics
-      contents:
-        - path: /git/test1-1.md
-        - path: /git/test1-2.md
     - title: FAQ
       contents:
         - path: /git/stories.md

@@ -14,7 +14,7 @@ module Docs
             index['url'] = page.url
           else
             # If we didn't find a corrosponding page...
-            index['title'] = item['title']
+            index['title'] = item['title'] || "No Page Found"
             index['url'] = item['path']
           end
 

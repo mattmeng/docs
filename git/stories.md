@@ -1,7 +1,8 @@
 ---
 title: Stories for Working with the Repository
-author: Matt Meng
-email: matt.meng@intel.com
+authors:
+  - name: Matt Meng
+    email: matt.meng@intel.com
 layout: page
 ---
 
