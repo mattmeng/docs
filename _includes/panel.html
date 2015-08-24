@@ -5,36 +5,16 @@
     <span></span>
     <span></span>
   </a>
+  <div class='tabs'>
+    <a onclick="changeTab( 'index' )" href='#'>Index</a> |
+    <a onclick="changeTab( 'toc' )" href='#'>TOC</a> |
+    <a onclick="changeTab( 'posts' )" href='#'>Blog</a>
+  </div>
   <div class="filterBlock" >
     <input type="text" id="filterInput" placeholder="Type to filter"/>
     <a href="#" id="clearFilterButton" >x</a>
   </div>
   <div id="content">
-    {% for section in site.data['index'] %}
-      <h2>
-        {% if section['url'] %}<a href="{{site.url}}{{section['url']}}">{% endif %}
-          {{section['title']}}
-        {% if section['url'] %}</a>{% endif %}
-      </h2>
-      {% for chapter in section['contents'] %}
-      <div>
-        <h3>
-          {% if chapter['url'] %}<a href="{{site.url}}{{chapter['url']}}">{% endif %}
-            {{chapter['title']}}
-          {% if chapter['url'] %}</a>{% endif %}
-        </h3>
-        <ul>
-          {% for page in chapter['contents'] %}
-            <li>
-              {% if page['url'] %}<a href="{{site.url}}{{page['url']}}">{% endif %}
-                {{page['title']}}
-              {% if page['url'] %}</a>{% endif %}
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-      {% endfor %}
-    {% endfor %}
   </div>
 </div>
 <script>
@@ -42,7 +22,7 @@
   var viewer = document.getElementById( 'viewer' );
 
   var expandButton = document.getElementById( 'expandButton' );
-  expandButton.addEventListener( 'click', function ( event ) {
+  expandButton.addEventListener( 'click', function( event ) {
     panel.classList.toggle( 'collapsed' );
     event.preventDefault();
   } );
@@ -53,185 +33,140 @@
   var DELIMITER = '/';
   var MEMBER_DELIMITER = '.';
   var nameCategoryMap = {};
-  var sections = [];
+  var sections = {};
 
   var content = document.getElementById( 'content' );
 
-  // var list = {
+  var current_tab = 'index';
+  var tab_list = [
+    {{ site.data['index'] }},
+    [],
+    {{ site.data['posts'] }}
+  ];
 
-  // };
+  function createList( list ) {
+    // Remove all children (faster and more efficient than innerHTML)
+    while( content.firstChild ) { content.removeChild( content.firstChild ) }
 
-  //     for ( var section in list ) {
+    for( var section in list ) {
+      section = list[section];
+      var h2 = document.createElement( 'h2' );
 
-  //       var h2 = document.createElement( 'h2' );
-  //       h2.textContent = section;
-
-  //       content.appendChild( h2 );
-
-  //       for ( var category in list[ section ] ) {
-
-  //         var div = document.createElement( 'div' );
-
-  //         var h3 = document.createElement( 'h3' );
-  //         h3.textContent = category;
-
-  //         div.appendChild( h3 );
-
-  //         var ul = document.createElement( 'ul' );
-  //         div.appendChild( ul );
-
-  //         for ( var i = 0; i < list[ section ][ category ].length; i ++ ) {
-
-  //           var page = list[ section ][ category ][ i ];
-
-  //           var li = document.createElement( 'li' );
-  //           var a = document.createElement( 'a' );
-  //           a.setAttribute( 'href', '#' );
-  //           ( function( s, c, p ) {
-  //             a.addEventListener( 'click', function( e ) {
-  //               goTo( s, c, p );
-  //               e.preventDefault();
-  //             } )
-  //           } )( section, category, page[ 0 ] )
-  //           a.textContent = page[ 0 ];
-  //           li.appendChild( a );
-  //           ul.appendChild( li );
-
-  //           nameCategoryMap[page[0]] = {
-  //             section: section,
-  //             category: category,
-  //             name: page[0],
-  //             element: a
-  //           };
-
-  //         }
-
-  //         content.appendChild( div );
-  //         sections.push( ul );
-
-  //       }
-
-
-  //     }
-
-  //     panel.appendChild( content )
-
-      function layoutList() {
-
-        sections.forEach( function( el ) {
-          var collapsed = true;
-          Array.prototype.slice.apply( el.children ).forEach( function( item ) {
-            if( !item.classList.contains( 'filtered' ) ) {
-              collapsed = false;
-              return;
-            }
-          } );
-          if( collapsed ) {
-            el.parentElement.classList.add( 'filtered' );
-          } else {
-            el.parentElement.classList.remove( 'filtered' );
-          }
-        } );
+      if( typeof section['url'] !== "undefined" ) {
+        var a = document.createElement( 'a' );
+        a.setAttribute( 'href', section['url'] );
+        a.textContent = section['title'];
+        h2.appendChild( a );
+      }
+      else {
+        h2.textContent = section['title'];
       }
 
-      filterInput.addEventListener( 'input', function( e ) {
-        updateFilter();
-      } );
+      content.appendChild( h2 );
 
-      clearFilterButton.addEventListener( 'click', function( e ) {
-        filterInput.value = '';
-        updateFilter();
-        e.preventDefault();
-      } );
+      for( var chapter in section['contents'] ) {
+        chapter = section['contents'][chapter];
+        var div = document.createElement( 'div' );
+        var h3 = document.createElement( 'h3' );
+        var ul = document.createElement( 'ul' );
 
-      function updateFilter() {
-
-        var exp = new RegExp( filterInput.value, 'gi' );
-        for( var j in nameCategoryMap ) {
-          var res = nameCategoryMap[ j ].name.match( exp );
-          if( res && res.length > 0 ) {
-            nameCategoryMap[ j ].element.parentElement.classList.remove( 'filtered' );
-            var str = nameCategoryMap[ j ].name;
-            for( var i = 0; i < res.length; i++ ) {
-              str = str.replace( res[ i ], '<b>' + res[ i ] + '</b>' );
-            }
-            nameCategoryMap[ j ].element.innerHTML = str;
-          } else {
-            nameCategoryMap[ j ].element.parentElement.classList.add( 'filtered' );
-            nameCategoryMap[ j ].element.textContent = nameCategoryMap[ j ].name;
-          }
+        if( typeof chapter['url'] !== "undefined" ) {
+          var a = document.createElement( 'a' );
+          a.setAttribute( 'href', chapter['url'] );
+          a.textContent = chapter['title'];
+          h3.appendChild( a );
         }
-        layoutList();
+        else {
+          h3.textContent = chapter['title'];
+        }
+        div.appendChild( h3 );
+        div.appendChild( ul );
 
+        for( var page in chapter['contents'] ) {
+          page = chapter['contents'][page];
+          var li = document.createElement( 'li' );
+          var a = document.createElement( 'a' );
+
+          a.setAttribute( 'href', page['url'] );
+          a.textContent = page['title'];
+          li.appendChild( a );
+          ul.appendChild( li );
+        }
+
+        content.appendChild( div );
       }
+    }
+  }
 
-      function encodeUrl( path ) {
+  function updateFilter() {
 
-        return path.replace(/\ \/\ /g, '.').replace(/\ /g, '_');
+  }
 
-      }
+  function changeTab( tab ) {
+    switch( tab ) {
+      case 'toc':
+        var index = 1;
+        break;
+      case 'posts':
+        var index = 2;
+        break;
+      default:
+        var index = 0;
+    }
 
-      function decodeUrl( path ) {
+    createList( tab_list[index] );
+  }
 
-        return path.replace(/_/g, ' ').replace(/\./g, ' / ');
+  filterInput.addEventListener( 'input', function( e ) {
+    updateFilter();
+  } );
 
-      }
+  changeTab( current_tab );
 
-      // Page loading
+      // function layoutList() {
+      //   sections.forEach( function( el ) {
+      //     var collapsed = true;
 
-      // function goTo( section, category, name, member ) {
-      //   var parts, location;
-
-      //   // Fully resolve links that only provide a name
-      //   if(arguments.length == 1) {
-
-      //     // Resolve links of the form 'Class.member'
-      //     if(section.indexOf(MEMBER_DELIMITER) !== -1) {
-      //       parts = section.split(MEMBER_DELIMITER)
-      //       section = parts[0];
-      //       member = parts[1];
+      //     Array.prototype.slice.apply( el.children ).forEach( function( item ) {
+      //       if( !item.classList.contains( 'filtered' ) ) {
+      //         collapsed = false;
+      //         return;
+      //       }
+      //     } );
+      //     if( collapsed ) {
+      //       el.parentElement.classList.add( 'filtered' );
+      //     } else {
+      //       el.parentElement.classList.remove( 'filtered' );
       //     }
+      //   } );
+      // }
 
-      //     location = nameCategoryMap[section];
-      //     if (!location) return;
-      //     section = location.section;
-      //     category = location.category;
-      //     name = location.name;
+
+      // clearFilterButton.addEventListener( 'click', function( e ) {
+      //   filterInput.value = '';
+      //   updateFilter();
+      //   e.preventDefault();
+      // } );
+
+      // function updateFilter() {
+      //   var exp = new RegExp( filterInput.value, 'gi' );
+
+      //   for( var j in nameCategoryMap ) {
+      //     var res = nameCategoryMap[ j ].name.match( exp );
+
+      //     if( res && res.length > 0 ) {
+      //       nameCategoryMap[ j ].element.parentElement.classList.remove( 'filtered' );
+      //       var str = nameCategoryMap[ j ].name;
+
+      //       for( var i = 0; i < res.length; i++ ) {
+      //         str = str.replace( res[ i ], '<b>' + res[ i ] + '</b>' );
+      //       }
+      //       nameCategoryMap[ j ].element.innerHTML = str;
+      //     } else {
+      //       nameCategoryMap[ j ].element.parentElement.classList.add( 'filtered' );
+      //       nameCategoryMap[ j ].element.textContent = nameCategoryMap[ j ].name;
+      //     }
       //   }
-
-      //   var title = 'three.js - documentation - ' + section + ' - ' + name;
-      //   var url = encodeUrl(section) + DELIMITER + encodeUrl( category ) + DELIMITER + encodeUrl(name) + (!!member ? MEMBER_DELIMITER + encodeUrl(member) : '');
-
-      //   window.location.hash = url;
-      //   window.document.title = title;
-
-      //   viewer.src = pages[ section ][ category ][ name ] + '.html' + (!!member ? '#'+member : '');
-
-      //   panel.classList.add( 'collapsed' );
-
+      //   layoutList();
       // }
-
-      // function goToHash() {
-
-      //   var hash = window.location.hash.substring( 1 ).split(DELIMITER);
-      //   var member = hash[2].split(MEMBER_DELIMITER)
-      //   goTo( decodeUrl(hash[0]), decodeUrl(hash[1]), decodeUrl(member[0]), decodeUrl(member.length > 1 ? member[1] : '') );
-
-      // }
-
-      // window.addEventListener( 'hashchange', goToHash, false );
-
-      // if ( window.location.hash.length > 0 ) goToHash();
-
-      // console.log([
-      //   '    __     __',
-      //   ' __/ __\\  / __\\__   ____   _____   _____',
-      //   '/ __/  /\\/ /  /___\\/ ____\\/ _____\\/ _____\\',
-      //   '\\/_   __/ /   _   / /  __/ / __  / / __  /_   __   _____',
-      //   '/ /  / / /  / /  / /  / / /  ___/ /  ___/\\ _\\/ __\\/ _____\\',
-      //   '\\/__/  \\/__/\\/__/\\/__/  \\/_____/\\/_____/\\/__/ /  / /  ___/',
-      //   '                                         / __/  /  \\__  \\',
-      //   '                                         \\/____/\\/_____/'
-      // ].join('\n'));
-
     </script>

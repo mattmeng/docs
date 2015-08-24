@@ -6,7 +6,7 @@ layout: default
   {% if page.authors %}
     <h3>By
       {% for author in page.authors %}
-        {% if forloop.last %}and {% endif %}{{ author.name }} &lt;<a href="mailto:{{ author.email }}" class="email">{{ author.email }}</a>&gt;{% if forloop.rindex > 2 %},{% endif %}
+        {% if forloop.last and forloop.length > 1 %}and {% endif %}{{ author.name }} &lt;<a href="mailto:{{ author.email }}" class="email">{{ author.email }}</a>&gt;{% if forloop.rindex > 2 %},{% endif %}
       {% endfor %}
     </h3>
   {% endif %}

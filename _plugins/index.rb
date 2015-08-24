@@ -33,7 +33,7 @@ module Docs
     end
 
     def generate( site )
-      site.data['index'] = build_index( site.data['index'], site )
+      site.data['index'] = JSON.generate( build_index( site.data['index'], site ) )
     end
   end
 end
