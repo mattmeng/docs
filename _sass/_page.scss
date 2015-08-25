@@ -78,6 +78,19 @@
     padding-left: 0px;
   }
 
+  pre, code {
+    font-family: $base-font-family;
+    font-size: $base-font-size;
+
+    color: firebrick;
+    padding: 0;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    margin: 0;
+    background-color: rgba(0,0,0,0.04);
+    border-radius: 3px;
+  }
+
   code.highlighter-rouge {
     font-family: $base-font-family;
     font-size: $base-font-size;

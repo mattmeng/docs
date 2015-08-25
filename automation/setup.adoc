@@ -1,0 +1,204 @@
+---
+title: Setup Environment
+authors:
+  - name: Eric Terry
+    email: Eric_Terry@McAfee.com
+  - name: Nathan Bitikofer
+    email: Nathan_Bitikofer@McAfee.com
+  - name: Matt Meng
+    email: matt.meng@intel.com
+  - name: Matt Hulse
+    email: Matt_Hulse@McAfee.com
+layout: page
+---
+
+:page-layout: base
+:toc: right
+:icons: font
+:idprefix:
+:idseparator: -
+:sectanchors:
+:source-highlighter: highlight.js
+:mdash: &#8212;
+:language: asciidoc
+:source-language: {language}
+:table-caption!:
+:example-caption!:
+:figure-caption!:
+:linkattrs:
+
+NOTE: For those who want to install Ruby on Windows, check out https://bugzilla.ida.lab/wiki/index.php/Installing_M3_on_Windows_--_A_Guide_for_the_Adventurous[Installing M3 on Windows -- A Guide for the Adventurous].
+
+=== Install Ruby
+
+There are several ways to install Ruby.  Below is a video describing the way to install Ruby using the https://rvm.io[Ruby Version Manager (RVM)] on Linux.  Whatever method you use, make sure you install at least version 2.1.
+
+video::http://automation.ida.lab:8000/mp4/setup_environment_install_ruby.mp4[width=500, title="Install Ruby", poster="http://automation.ida.lab:8000/thumbnails/setup_environment_install_ruby.jpg"]
+
+NOTE:  If the command to download the key using gpg fails because of a blocked port issue on the network, try running `gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3` instead.
+
+WARNING:  If `bundle` is not installed on your system (or if it prompts you to attempt to install it via apt-get), run `gem install bundler`.  Do not run `sudo apt-get install bundler`!
+
+=== Install RSpec
+
+To install RSpec (and all dependencies needed to run automation) type `bundle` within the `core/automation` directory.
+
+=== Get libNitroDB.so
+
+In order to interact with the database and make SQL calls, you will need libNitroDB.so on your computer.  If you don't have it on your computer or if it is in the wrong location, you will get an error similar to:
+
+----
+Could not open library 'NitroDB': NitroDB: cannot open shared object file: No such file or directory.
+Could not open library 'libNitroDB.so': libNitroDB.so: cannot open shared object file: No such file or directory
+/var/lib/gems/2.1.0/gems/nitrodb-1.0.0/lib/nitrodb.rb:278:in `nitro_get_buildstamp': undefined method `Nitro_GetBuild' for EDB:Module (NoMethodError)
+----
+
+* Navigate to `\\idastna1.corp.nai.org\odin\NitroEDB\nightly_build`
+* Open the latest directory that makes sense for your machine (Linux/Win and 32/64 bit)
+* Copy `libNitroDB.so`
+* Place the file in the `lib` directory that Ruby has access to
+
+TIP: If you installed Ruby using RVM as shown in the video above, you can place the `libNitroDB.so` file in `~/.rvm/rubies/ruby-[VERSION]/lib/`.
+
+=== Setup configuration file
+
+The configuration file is at `~/.m3/config`. It is a JSON file that contains several options.
+
+==== "devices"
+
+This key specifies device information custom to your setup. It is the only required key. It lists all devices you would like to use for testing. The devices do not need to be active or reachable, this key simply lets you list out all the devices you _could_ use for testing.
+
+[source,json]
+----
+"devices": {
+  "esms": {
+    <nickname>: {
+      "address": <ip_address>
+      "password": <password_of_root>
+    },
+    ...
+  },
+  ...
+}
+----
+
+Under the *devices* hash, you can specify any device type of the following (as shown above):
+
+* aces
+* adms
+* dems
+* elms
+* esms
+* ipss
+* recelms
+* recs
+
+Each device type is also a hash and can contain any number of devices. Each device requires a nickname used to refer to it, an IP address, and the root password. Example:
+
+[source,json]
+----
+{
+  "devices": {
+    "esms": {
+      "0": {
+        "address": "10.75.80.200",
+        "password": "Security.4u"
+      }
+    },
+    "elms": {
+      "1": {
+        "address": "10.75.80.201",
+        "password": "Security.4u"
+      },
+      "2": {
+        "address": "10.75.80.202",
+        "password": "Security.4u"
+      }
+    }
+  }
+}
+----
+
+.Custom SSH port
+If you need to specify a custom SSH port, you can do so by providing a "ssh-port" key and value to the JSON object for the device like this:
+
+[source,json]
+----
+{
+  "devices": {
+    "esms": {
+      "0": {
+        "address": "10.75.80.200",
+        "password": "Security.4u",
+        "ssh-port": 2222
+      }
+    }
+  }
+}
+----
+
+==== "loadouts"
+
+CAUTION: Only use loadouts if your test needs more than one esm or more than one device type (like two aces, or two receivers, etc.).
+
+This key specifies, per-test-unit, what devices to use for test units that have device loadouts. Devices can be referenced in the test units in the order in which they are given.
+
+Available devices are ACEs, ADMs, DEMs, ELMs, ESM, IPSs, RECELMs, and RECs. Use the same devices keywords to reference each device type in the test unit loadout. The key for the device is the name of the device in the devices option.
+
+[source,json]
+----
+"loadouts": [
+  <test_unit_name>: {
+    "esms": [
+      <esm_1_name>,
+      ...
+    ],
+    ...
+  }
+]
+----
+
+For example, given the following test unit:
+
+[source,ruby]
+----
+loadout esms: 1, elms: 2
+----
+
+The test unit is asking for a single esm and two elms. If we don't fulfill this requirement, we can't run the test. We specify the devices to use with the following:
+
+[source,json]
+----
+{
+  "devices": {
+      "esms": {
+        "0": {
+          "address": "10.75.80.200",
+          "password": "Security.4u"
+        }
+      },
+      "elms": {
+        "1": {
+          "address": "10.75.80.201",
+          "password": "Security.4u"
+        },
+        "2": {
+          "address": "10.75.80.202",
+          "password": "Security.4u"
+        }
+      }
+    }
+  },
+  "loadouts": [
+    "my_test": {
+      "esms": [
+        "0"
+      ],
+      "elms": [
+        "1",
+        "2"
+      ]
+    }
+  ]
+}
+----

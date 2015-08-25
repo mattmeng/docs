@@ -1,0 +1,316 @@
+---
+title: Introduction
+authors:
+  - name: Eric Terry
+    email: Eric_Terry@McAfee.com
+  - name: Nathan Bitikofer
+    email: Nathan_Bitikofer@McAfee.com
+  - name: Matt Meng
+    email: matt.meng@intel.com
+  - name: Matt Hulse
+    email: Matt_Hulse@McAfee.com
+layout: page
+---
+
+:page-layout: base
+:toc: right
+:icons: font
+:idprefix:
+:idseparator: -
+:sectanchors:
+:source-highlighter: highlight.js
+:mdash: &#8212;
+:language: asciidoc
+:source-language: {language}
+:table-caption!:
+:example-caption!:
+:figure-caption!:
+:linkattrs:
+
+== Writing unit tests
+
+=== Introduction
+
+Unit tests are a form of tests meant to verify the correct behavior of the smallest testable unit of code - referred to hereafter as a unit. A unit typically consists of either a) a single procedure in procedural programming, or 2) a single class in object-oriented programming. A unit test seeks to ensure that the unit in question consistently behaves correctly in the presence of predetermined inputs. Unit tests differ from other tests in several ways:
+
+* Scope: A unit test only verifies that this unit behaves as expected. It cannot tell whether the unit correctly interacts with other units. Such wider-scope tests are either integration or system tests.
+* Granularity of Feedback: When a unit test fails, the developer knows exactly which unit is failing. This differs from system tests in that when a failure is detected, the offending code must be within a handful of lines, rather than having to search the entire stack as he or she would have to do when a system test fails.
+* Timeliness: Unit tests are traditionally written before or at the same time as the units which they test. These tests should be available to the team as soon as the developer commits the associated production code.
+* Independence: Unit tests depend on the code that they test and on nothing else. A unit test can be run in any environment that the associated production code can be compiled in. It does not require a running deployment of the production system and therefore any developer should be able to run the tests on his or her own computer.
+* Speed: A correctly designed unit test suite should be able to run in a matter of seconds to minutes. This speed is key to unit tests' success. The suite must run fast enough that a developer can make a change, run the unit test suite, and know with a high degree of confidence that their change is safe to commit. If a change causes a test to fail, the developer knows immediately and does not commit his or her changes.
+
+=== Unit Tests as Documentation
+
+Unit tests make an excellent base for a stable project. Well written unit tests will ensure that all of the nuts and bolts of a project will reliably behave as excepted. However, the usefulness of a unit test is not limited to its use in automated testing. Well-written unit tests also serve as an excellent resource for developers seeking documentation. When a developer needs to know what a particular unit does, he or she can open the unit test associated with that unit and immediately find concise examples of the unit being used. The developer will see how the unit is expected to behave (and if the unit tests are passing, how it indeed does behave) in the presence of normal inputs. Well written tests will also illustrate how the unit behaves in edge cases, and will often also give examples of invalid input. While not a replacement for more formal documentation, using unit tests as an initial source of examples and described behaviors will save developers a lot of time. One great advantage of using unit tests as documentation is that so long as the tests are passing, the unit test cannot ever provide out-of-date information. It's the only form of documentation that is always guaranteed to be up-to-date.
+
+=== Unit Testing Frameworks
+
+Most modern languages -- including all languages used in the SIEM products -- have one or more unit testing frameworks written for that language. To begin writing unit tests, start with one of these premade frameworks. The frameworks all have various differences, but there are some things that are common to all:
+* Test Cases: A test case represents a single scenario for a unit. For example, a class may have several methods, and a single test case may send a set of inputs to one method of an instance of that class and verify that the resulting behavior is correct.
+* Assert Statements: Although not always called asserts, the concept of an assert statement is a line of test code that checks whether the state or behavior of the unit being tested is expected. A test case has one or more assert statements. All assert statements must pass for the test case to pass. Although a single test case can have multiple asserts, it should still only test a single scenario.
+* Consistent, Parsable Output: A proper unit test framework will output the results of the test suite in a consistent, parsable format so that a user or an automated build environment can easily interpret the results of the test suite. This typically involves output from each test about it's success and/or failure, followed by aggregate data such as total number of tests run, total passed, total failed, etc.
+* Mocking framework: It has already been mentioned that a unit test should test ONLY the unit in question and should be isolated from other units. This becomes problematic when, in real code, units often have dependencies on  and interaction with other units. If this is not accounted for, a test failure cannot be reliably attributed the code being tested. For this reason, dependencies must be mocked. The most basic way of doing this is to write stub objects that implement the dependent interface, but this can become cumbersome. Therefore, many unit test frameworks have mocking frameworks either built-in or easily pairable. These allow the test writer to quickly make a mock of an object and force known behavior for the unit's dependencies, so any failures detected by the test can reliably be attributed to the tested unit. The mock frameworks essentially allow you to create an object that can be provided to the unit as its dependency without having to write an entire subclass. Only the behavior you need is specified and everything else behaves in the default manner.
+
+=== Best Practices
+
+There are many ways to write unit tests, but we recommend following these best practices:
+* Only unit test public functions. Anything that is private is merely implementation details
+* Store unit tests with the project that the tests apply to. There are two common ways to do this: 1) have unit test files side-by-side with the units they are testing, or 2) create a unit test directory at the root of your project source. If you choose option 2, please interperet 'project' in the narrowest possible sense. For example, libmsgreader would be considered a project, not the Receiver and not the entire NitroVision repository.
+* There should be no traces of test code in production code. The production code file should contain only production code.
+* Unit test cases should identify normal inputs, edge-case inputs and, where possible, invalid inputs
+* Use dependency injection to provide your unit with its dependencies. This can be as simple as passing all objects upon which your unit depends in the constructor rather than creating them within your constructor. This allows you to easily insert mock dependencies and thus isolate the tested unit. If this is inconvenient for how you intend to use the unit, make two constructors: one that creates the dependencies and one that accepts the dependencies. For example, if you had a class 'MyClass' which depended on class 'OtherClass', and you were in a language that requires explicit destructors, a template like the following could be used:
+
+[source, c++]
+----
+class MyClass
+{
+  OtherClass dependency;
+  bool dependencyCreated;
+
+  public MyClass()
+  {
+    dependency = new OtherClass();
+    dependencyCreated = true;
+  }
+
+  public MyClass(OtherClass the_dependency)
+  {
+    dependency = the_dependency;
+    dependencyCreated = false;
+  }
+
+  public ~MyClass()
+  {
+    if (dependencyCreated)
+    {
+      dependency.free();
+    }
+  }
+}
+----
+
+* Do not mock containers or other classes provided by the language. For example, if your unit has a HashMap or an ArrayList, do not attempt to mock these. They may be safely assumed to work correctly. If they do not, your unit test should point this out for you when it fails.
+* Write all unit tests to be independent of all others. Assume the unit tests will run in a random order (which many test frameworks will do), and do not rely on a previous test to set up your state for the next test to work correctly.
+* Do not unit test trivial getters and setters. If your your getters and setters contain non-trivial logic, include them in your test. If they merely set or access a variable without any validation or other logic, though, a unit test would be unnecessary.
+* Unit tests should have descriptive, consistent names. Each test's name should describe what behavior it is attempting to validate. This serves to improve unit tests' function as a form of documentation, as well as make it easier for other developers to work on your unit.
+
+=== Language-specific guidance
+
+==== C
+
+NOTE: This section is not yet written.
+
+==== Java
+
+For Java, we recommend using JUnit. A JUnit test class is a normal class containing no-argument void methods which are indicated as tests by placing the "@Test" annotation immediately before the method. Tests are executed using the org.junit.runner.JUnitCor class, and results are stored in org.junit.runner.Result. Depending on your IDE, running the tests can be automatically set up for you. Please see section 5 of the following tutorial:
+
+http://www.vogella.com/tutorials/JUnit/article.html#junittesting
+
+==== Javascript
+
+For javascript. we recommend the Jasmine test framework. Its syntax is extremely similar to RSpec. The framework consists of "describe" blocks which represent a suite of tests, each with one or more "it" blocks that test a specific piece of the unit. For example, if I had a unit of code (a function or object) that I was testing called "MyUnit", I would Create a describe block as follows:
+
+[source, javascript]
+----
+describe("MyUnit", function(){});
+----
+
+This is an empty test suite. In order to add tests to it, we would put one or more "it" blocks inside the empty anonymous function, as follows:
+
+[source, javascript]
+----
+describe("MyUnit", function(){
+  it("can multiply two positive numbers", function(){
+    answer = MyUnit.multiply(2,3);
+    expect(answer).toBe(6);
+  })
+})
+----
+
+The above test makes sure that the function MyUnit.juggle() returns true. Note that the "excpect" declarations are what verifies that the test was successful. Also, note the way this code reads as a form of documentation. The test seeks to describe the behavior of the unit (hence the text suite is declared with a "describe" block). It then makes one or more statements about how this unit behaves: "It can multiply two positive numbers" or "It rejects negative values", or any other way that this unit is expected to behave.
+
+To learn more about how to use Jasmine, please visit the following link:
+http://jasmine.github.io/2.3/introduction.html
+
+==== FreePascal
+
+For FreePascal, we recommend fpUnit. Unit testing in fpUnit is accomplished by creating a subclass of the TTestCase Class. Each no-argument procedure in the class's published section is considered a test to be run. Within each test procedure, one or more Check functions are executed (these are the assert statements from most test frameworks). There are many Check functions that cover a wide range of scenarios. CheckEquals, CheckGreaterThan, CheckNotNull, etc. are all provided as part of the framework. They all take the actual value (output of your tested unit), an expected value, where that makes sense, and an optional message to display in case the check fails. The test class is registered with the framework by executing the following line:
+
+TestFramework.RegisterTest(MyTestCase.Suite);
+
+Then all registered tests are run by executing the following:
+
+[source, pascal]
+----
+RunRegisteredTests();
+----
+
+The simplest way to implement this would be to create a program where the main file includes all test class files in its uses statement, and putting the line that registers the test class in the initialization block of the test class's unit. This way, when the program runs, it will run all of the initialization blocks, thus registering all of the tests, and then run all tests. This approach does not allow the developer to only run a subset of the tests, though. More clever methods are needed for that. Such clever methods are outside the scope of this article.
+
+Below is a simple example of unit testing MyUnit in Freepascal:
+
+===== Original Unit
+
+[source, pascal]
+----
+unit MyUnit;
+
+interface
+
+type
+  TMyClass = class
+    public
+      function multiply(a, b : integer) : boolean;
+  end;
+
+implementation
+
+function TMyClass.multiply(a, b : integer) : boolean;
+begin
+  result := a * b;
+end;
+----
+
+===== Unit Test
+[source, pascal]
+----
+unit MyUnit_test;
+
+interface
+
+uses
+  MyUnit,
+  TestFramework;
+
+type
+  TMyUnitTestCase = class(TTestCase)
+    published
+      procedure TestMyClassCanMultiplyPositives;
+  end;
+
+implementation
+
+procedure TMyUnitTestCase.TestMyClassCanMultiplyPositives;
+var
+  answer     : boolean;
+  myInstance : TMyClass;
+
+begin
+  myInstance := TMyClass.Create();
+  try
+    answer := myInstance.multiply(2, 3);
+    CheckEquals(6, answer, 'Failed to multiply positive integers');
+  finally
+    myInstance.Free();
+  end;
+end;
+
+initialization
+  TestFramework.RegisterTest(TMyUnitTestCase.Suite);
+end;
+----
+
+===== Test Runner Program
+[source, pascal]
+----
+program RunTests;
+
+uses
+  Classes,
+  MyUnit_test,
+  TextTestRunner;
+begin
+  RunRegisteredTests;
+end.
+----
+
+==== Perl
+
+
+NOTE: This section is not yet written.
+
+== Writing system tests
+
+NOTE: This section is not yet written.
+
+== Writing e2e tests
+
+NOTE: This section is not yet written.
+
+NOTE: View documentation at https://bugzilla.ida.lab/wiki/index.php/End-to-End_GUI_Testing
+
+video::http://automation.ida.lab:8000/mp4/gui_testing_intro.mp4[width=500, title="Introduction", poster="http://automation.ida.lab:8000/thumbnails/gui_testing_intro.jpg"]
+
+video::http://automation.ida.lab:8000/mp4/end_to_end_intro.mp4[width=500, title="Intro to End-to-End tests", poster="http://automation.ida.lab:8000/thumbnails/end_to_end_intro.jpg"]
+
+video::http://automation.ida.lab:8000/mp4/end_to_end_helpers.mp4[width=500, title="Using helpers in End-to-End tests", poster="http://automation.ida.lab:8000/thumbnails/end_to_end_helpers.jpg"]
+
+video::http://automation.ida.lab:8000/mp4/end_to_end_faker.mp4[width=500, title="Using faker in End-to-End tests", poster="http://automation.ida.lab:8000/thumbnails/end_to_end_faker.jpg"]
+
+== Jobs
+
+NOTE: Detailed documentation for jobs can be found at http://automation.ida.lab:1234/docs/siem_api/SiemApi/Job
+
+=== Calling a job
+
+An instance of the job class is returned when an api method starts with 'OpCode_' and maps to a currently defined job code in jobs_opcodes.rb.
+
+[source,ruby]
+----
+@elm = @esm[:elm].first
+job = @esm.OpCode_ELMCreatePool( @elm.ipsid, "Name=#{pool_name}\nDesc=#{pool_desc}" )
+job.wait # blocks execution until job completes.
+debug job.running?
+debug job.finished?
+debug job.jec
+debug job.response # Converts result[:resp] name/value pairs string to a hash.
+debug job.result[:resp] # Get the raw response
+assert_job_call( job.result, ERROR_Ok )
+----
+
+Note: `#response` will attempt to parse the result into a hash, but some Jobs may not return results that map correctly. Your mileage may vary.
+
+=== Calling a job with a params hash
+
+In addition to taking a static params string, the Job runner also takes a params hash that would look like this:
+
+[source,ruby]
+----
+@elm = @esm[:elm].first
+job = @esm.OpCode_ELMCreatePool( @elm.ipsid, { Name: pool_name, Desc: pool_desc } ).wait
+assert_job_call( job.result, ERROR_Ok )
+----
+
+Note: Not all job inputs map cleanly to name/value pairs so there may be times where the parameter string is the best choice.
+
+=== Create a job class from a job id
+
+An alternate constructor has been added which allows a job class to be created using just a job id. This is especially useful for jobs that are kicked off from an API call.
+
+[source,ruby]
+----
+@elm = @esm[:elm].first
+job = @esm.OpCode_ELMCreatePool( @elm.ipsid, "Name=#{pool_name}\nDesc=#{pool_desc}" )
+job2 = @esm.job_from_id( job.id )
+
+# if an invalid job_id is passed to new_from_id, an exception will be raised
+
+job2.wait # Use it the same way as the original job class.
+debug job2.response
+----
+
+=== Call a job from a helper
+
+When calling a job from a helper, you typically want the job error code (JEC) to be 0 at all times. Rather than have to check to make sure that job error code (JEC) is 0 every time you call a job within a helper, you can append a bang (!) to the job name and if job error code (JEC) is not 0, it will throw an exception.
+
+[source,ruby]
+----
+@esm.OpCode_SomeJob!( @esm.ipsid )
+----
+
+Calling job_from_id! will have the same behavior:
+
+[source,ruby]
+----
+@esm.job_from_id!( result[:jid] )
+----

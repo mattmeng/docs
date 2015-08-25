@@ -1,0 +1,44 @@
+---
+title: Automation System Big Picture
+authors:
+  - name: Eric Terry
+    email: Eric_Terry@McAfee.com
+  - name: Nathan Bitikofer
+    email: Nathan_Bitikofer@McAfee.com
+  - name: Matt Meng
+    email: matt.meng@intel.com
+  - name: Matt Hulse
+    email: Matt_Hulse@McAfee.com
+layout: page
+---
+
+:page-layout: base
+:toc: right
+:icons: font
+:idprefix:
+:idseparator: -
+:sectanchors:
+:source-highlighter: highlight.js
+:mdash: &#8212;
+:language: asciidoc
+:source-language: {language}
+:table-caption!:
+:example-caption!:
+:figure-caption!:
+:linkattrs:
+
+NOTE: This section is not yet written.
+
+video::http://automation.ida.lab:8000/mp4/esm_product_overview.mp4[width=500, title="ESM product overview", poster="http://automation.ida.lab:8000/thumbnails/esm_product_overview.jpg"]
+
+video::http://automation.ida.lab:8000/mp4/how_testing_framework_ties_in.mp4[width=500, title="The testing framework", poster="http://automation.ida.lab:8000/thumbnails/how_testing_framework_ties_in.jpg"]
+
+video::http://automation.ida.lab:8000/mp4/automated_build_testing.mp4[width=500, title="Automated build testing", poster="http://automation.ida.lab:8000/thumbnails/automated_build_testing.jpg"]
+
+=== Jenkins
+
+=== Whiteboard
+
+=== Test runner
+
+=== icon:desktop[] Virtual machines

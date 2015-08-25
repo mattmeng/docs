@@ -1,0 +1,164 @@
+---
+title: Other Tools
+authors:
+  - name: Eric Terry
+    email: Eric_Terry@McAfee.com
+  - name: Nathan Bitikofer
+    email: Nathan_Bitikofer@McAfee.com
+  - name: Matt Meng
+    email: matt.meng@intel.com
+  - name: Matt Hulse
+    email: Matt_Hulse@McAfee.com
+layout: page
+---
+
+:page-layout: base
+:toc: right
+:icons: font
+:idprefix:
+:idseparator: -
+:sectanchors:
+:source-highlighter: highlight.js
+:mdash: &#8212;
+:language: asciidoc
+:source-language: {language}
+:table-caption!:
+:example-caption!:
+:figure-caption!:
+:linkattrs:
+
+== icon:wrench[] Other helpful tools
+
+Most of the tools below were created in-house.  You can get them by cloning the sit/misc_tools GIT repository by running `git clone git@git.ida.lab:sit/misc_tools.git`.
+
+=== s (an SSH tool)
+
+Tool that allows you to SSH into anything without worrying about any prompts for anything, including passwords.
+
+----
+s -h
+  s [ip] [password] [username]
+
+  Must have sshpass installed!
+    sudo apt-get install sshpass
+
+  Edit this file to set the 'default_ip', 'default_pass', and 'default_username'
+    If default_ip='10.75.110.5'
+      's'             would be: ssh root@10.75.110.5
+      's 2'           would be: ssh root@10.75.110.2
+      's 76.150'      would be: ssh root@10.75.76.150
+      's 40.50.60     would be: ssh root@10.40.50.60
+      's 192.168.0.5  would be: ssh root@192.168.0.5
+
+    If default_pass='Q@_T3st.NGCP'
+      's 2'              would use 'Q@_T3st.NGCP'  as the password
+      's 2 Security.4u'  would use 'Security.4u' as the password
+
+    If default_username='root'
+      's 2'                would be: ssh root@10.75.110.2
+      's 2 pass admin'     would be: ssh admin@10.75.110.2 with 'pass' as the password
+----
+
+video::http://automation.ida.lab:8000/mp4/helpful_tools_s.mp4[width=500, title="s", poster="http://automation.ida.lab:8000/thumbnails/helpful_tools_s.jpg"]
+
+=== irb and irbesm
+
+CAUTION: This section is outdated and needs to be rewritten!
+
+Tool that allows you to use irb (interactive Ruby) with everything loaded from the @esm and @api objects.  All helpers and utilities will be added to the loadpath for you as well if you run from the "tests" directory.
+
+video::http://automation.ida.lab:8000/mp4/helpful_tools_irb.mp4[width=500, title="irb and irbesm", poster="http://automation.ida.lab:8000/thumbnails/helpful_tools_irb.jpg"]
+
+=== get_info
+
+Tool to view information about a specific ESM/device (model, machine ID, login banner, device locale, build number, repository revisions, HA status, etc.) You can specify multiple IP addresses by using -i more than once or use -r to specify a range.
+
+----
+get_info -h
+Usage: get_info [options]
+    -i, --ip_addr IP                 IP address
+    -r, --ip_range IP                IP address range (example: "2-16" or "76.100-109").
+                                     Using this will only show the buildnumber and will
+                                     show no results for IP's that are down or don't
+                                     have a buildstamp file
+    -p, --password IP                Password
+    -b, --buildnumber                Only show the buildnumber
+    -d, --database                   Shows the database path, DFL version, and version date
+    -t, --table TABLE                Show the table version of the specified table name
+    -v, --version                    Show the version of this script
+    -h, --help                       Show this message
+----
+
+video::http://automation.ida.lab:8000/mp4/helpful_tools_get_info.mp4[width=500, title="get_info", poster="http://automation.ida.lab:8000/thumbnails/helpful_tools_get_info.jpg"]
+
+=== api_collector
+
+API Collector is a tool that shows API requests and responses on an ESM.  It has to run on an ESM.
+
+----
+perl api_collector.pl --help
+###############################################################################
+#  script: api_collector.pl
+#
+#  Input:
+#    -d|debug      - None    - Optional - Print Debug Statements
+#    -h|help       - None    - Optional - Prints Usage
+#    -n|num        - Integer - Optional - Get N Previous Requests (+/- 1)
+#    -o|oneline     - None   - Optional - Print Requests on one line
+#    -i|ip         - String  - Optional - Filter by a set of IP Address's
+#    -s|session    - Integer - Optional - Filter by a Session
+#    -a|api        - String  - Optional - Filter by a set of API's
+#    -e|ec         - String  - Optional - Filter by a set of Error Codes
+#    -c|contains   - String  - Optional - Filter by a set of Strings
+#    -r|raw        - None    - Optional - Print Raw Request Debug
+#    -f|filter     - None    - Optional - Print Filter Debug
+#
+#  Usage Examples:
+#    perl api_collector.pl
+#    perl api_collector.pl -h
+#    perl api_collector.pl -d
+#    perl api_collector.pl -r
+#    perl api_collector.pl -f
+#    perl api_collector.pl -o
+#    perl api_collector.pl -n 100
+#    perl api_collector.pl -i 10.75.110.7
+#    perl api_collector.pl -i 10.75.110.7 -i 10.75.110.6
+#    perl api_collector.pl -a USER_LOGIN -a USER_LOGOUT
+#    perl api_collector.pl -a ~QRY
+#    perl api_collector.pl -a '!QRY'
+#    perl api_collector.pl -e 66 -e 60
+#    perl api_collector.pl -e ~0
+#    perl api_collector.pl -e '!0'
+#    perl api_collector.pl -c Username
+#    perl api_collector.pl -c ~Username
+#    perl api_collector.pl -c '!Willy'
+#    perl api_collector.pl -i 10.75.110.7 -a USER_LOGIN -e '!0' -o
+#    perl api_collector.pl -a QRY -a ~QRY_TERMINATE
+#
+#  Notes:
+#    Doing a Not Error Code MUST be in single quotes (i.e. '!0').
+#    May do ~ instead of ! for not.
+#    API's are not printed out until the output is sent back!
+#
+#  Logic for Filtering:
+#   -a USER -a MISC = All USER and MISC apis
+#   -a USER -a MISC ~USER_LOGIN = All USER excluding USER_LOGIN and all MISC apis
+#   -a ~USER -a ~QRY = Get all non USER and non QRY apis
+###############################################################################
+----
+
+video::http://automation.ida.lab:8000/mp4/helpful_tools_api_collector.mp4[width=500, title="api_collector", poster="http://automation.ida.lab:8000/thumbnails/helpful_tools_api_collector.jpg"]
+
+=== esm_tail
+
+Outputs meaningful information about the ESM or device that it is running on and then shows messages from the log files that are of concern (known as "tailing for nastiness").  Be sure to SCP it to an ESM and then run `./esm_tail.sh`.
+
+video::http://automation.ida.lab:8000/mp4/helpful_tools_esm_tail.mp4[width=500, title="esm_tail", poster="http://automation.ida.lab:8000/thumbnails/helpful_tools_esm_tail.jpg"]
+
+=== byebug
+
+https://github.com/deivid-rodriguez/byebug[Byebug] is a simple to use, feature rich debugger for Ruby 2.  It allows you to see what is going on inside a Ruby program while it executes and offers many of the traditional debugging features.
+
+To use byebug, just add `require 'byebug'; byebug` anywhere in your Ruby file.
+
+video::http://automation.ida.lab:8000/mp4/helpful_tools_byebug.mp4[width=500, title="byebug", poster="http://automation.ida.lab:8000/thumbnails/helpful_tools_byebug.jpg"]

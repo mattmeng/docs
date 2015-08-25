@@ -1,9 +1,21 @@
 #
-- title: Automation
+- title: Automated Testing
   contents:
     - title: Basics
       contents:
-        - path: /automation/index.adoc
+        - path: /automation/intro.adoc
+        - path: /automation/setup.adoc
+    - title: Process and Tools
+      contents:
+        - path: /automation/testing_types.adoc
+        - path: /automation/test_structure.adoc
+        - path: /automation/helpers_and_wrappers.adoc
+        - path: /automation/rspec.adoc
+        - path: /automation/other_tools.adoc
+        - path: /automation/writing_tests.adoc
+    - title: Additional Information
+      contents:
+        - path: /automation/big_picture.adoc
 - title: Git
   contents:
     - title: FAQ

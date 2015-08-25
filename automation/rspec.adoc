@@ -1,0 +1,326 @@
+---
+title: RSpec
+authors:
+  - name: Eric Terry
+    email: Eric_Terry@McAfee.com
+  - name: Nathan Bitikofer
+    email: Nathan_Bitikofer@McAfee.com
+  - name: Matt Meng
+    email: matt.meng@intel.com
+  - name: Matt Hulse
+    email: Matt_Hulse@McAfee.com
+layout: page
+---
+
+:page-layout: base
+:toc: right
+:icons: font
+:idprefix:
+:idseparator: -
+:sectanchors:
+:source-highlighter: highlight.js
+:mdash: &#8212;
+:language: asciidoc
+:source-language: {language}
+:table-caption!:
+:example-caption!:
+:figure-caption!:
+:linkattrs:
+
+TIP: For those who are familiar with the *M3* testing framework, please watch icon:video-camera[] http://automation.ida.lab:8000/mp4/from_m3_to_rspec.mp4[From M3 to Rspec^].
+
+video::http://automation.ida.lab:8000/mp4/rspec_intro_training.mp4[width=500, title="Rspec intro training", poster="http://automation.ida.lab:8000/thumbnails/rspec_intro_training.jpg"]
+
+From this point on, we will use RSpec terminology.
+
+|===
+|Term |Rspec Terminology
+
+|Test Unit
+|Specification (or Spec)
+
+|Test Case
+|Example
+
+|Assertion
+|Expectation
+|===
+
+All specs should be written and saved under the `automation/spec` directory.  The directory structure under `automation/spec` can be organized anyway that you feel is appropriate.  A standard may be determined later on.  All specs should have "_spec.rb" at the end of the file name for consistency and standard.
+
+There are many ways to write an RSpec specification.  Because there are so many ways (and many are bad practice or deprecated), before reading anything else in this document, *please read the entire RSpec guidelines documentation at http://betterspecs.org/.*
+
+For detailed documentation on RSpec Core, see http://www.relishapp.com/rspec/rspec-core/v/3-3/docs
+
+=== How to run a spec
+
+WARNING: Only run RSpec within the "automation" directory.  Running it anywhere else may have unexpected behavior.
+
+To run a spec using the default device in your `~/.m3/config` file (which is the first listed ESM in the JSON):
+
+----
+cd core/automation
+rspec spec/name_of_spec.rb
+----
+
+To run the demo_spec.rb (which will contain both passes and failures):
+
+----
+rspec spec/demo_spec.rb
+----
+
+To run a spec using a specific ESM that is defined withing your `~/.m3/config` file:
+
+----
+DEVICE=key_from_config rspec spec/demo_spec.rb
+----
+
+So if you had this as your config file:
+
+[source,json]
+----
+{
+  "devices": {
+    "esms": {
+      "110.135": {
+        "address": "10.75.110.135",
+        "password": "Q@_T3st.NGCP"
+      }
+    }
+  }
+}
+----
+
+You could run a spec like this:
+
+----
+DEVICE=110.135 rspec spec/demo_spec.rb
+----
+
+For all other ways to run RSpec, please run:
+
+----
+rspec --help
+----
+
+=== Structure
+
+WARNING: Do not use the _should_ syntax! The _expect_ syntax is the new way of asserting in RSpec.  See http://betterspecs.org/#expect.
+
+[source,ruby]
+----
+describe 'Login' do // <1>
+  before( :all ) do // <2>
+    @auth = Authentication.new( @esm )
+  end
+
+  before( :each ) do // <3>
+    @auth.logout
+  end
+
+  context 'with no password' do // <4>
+    # Arrange
+    let( :user ) { 'NGCP' }
+    let( :pass ) { '' }
+
+    it 'raises a password required error' do // <5>
+      # Act
+      @auth.login( user, pass )
+
+      # Assert
+      expect { login }.to raise_error 'Password is required' // <6>
+    end
+  end
+
+  context 'with no username' do
+  end
+
+  context 'with bad password' do
+  end
+
+  context 'with valid credentials' do
+  end
+end
+----
+<1> Name of the spec. In this case, the filename should be "login_spec.rb" because the spec is named "Login".
+<2> This is the _setup_ for the entire spec. Anything that needs to be shared between examples can be set here. Usually the setup will create helper instances you will need throughout the spec.
+<3> This is the _setup_ that will run before each example.
+<4> Use _context_ blocks to make your test more clear and well organized.
+<5> This is the actual example that contains the expectation.
+<6> This is the expectation of the example. In this case, we are expecting that when we login with no password, the system should raise an error. `raise_error` is a built-in matcher.  There are many matchers provided by the RSpec framework.
+
+video::http://automation.ida.lab:8000/mp4/rspec_example_test.mp4[width=500, title="Rspec example test", poster="http://automation.ida.lab:8000/thumbnails/rspec_example_test.jpg"]
+
+=== Expectations
+
+Expectations are where the actual testing takes place.  An expectation will always return a Boolean value (did it pass or did it fail?).  Best practice is to have only one expect per example.
+
+.Basic structure
+[source,ruby]
+----
+expect(actual).to matcher(expected)
+expect(actual).not_to matcher(expected)
+----
+
+.Examples
+[source,ruby]
+----
+expect(5).to eq(5)
+expect(5).not_to eq(4)
+----
+
+=== Matchers
+
+Matchers are different ways to make assertions.  What are you expecting a value to be, do, or have?  This is what matchers determine.
+
+.A few examples
+[source,ruby]
+----
+expect( result ).to eq 5 // <1>
+expect( result ).to be String // <2>
+expect( result ).to be > 3 // <3>
+expect( result ).to be_between( 4, 9 ) // <4>
+expect( result ).to match /^expression.*$/ // <5>
+expect( result ).to be_within( delta ).of 6 // <6>
+expect( result ).to start_with 'abc' // <7>
+expect( result ).to respond_to 'login' // <8>
+expect( result ).to be true // <9>
+expect( result ).to be_nil // <10>
+expect( result ).to be_empty // <11>
+expect( result ).to exist // <12>
+expect { result }.to raise_error( ErrorClass, 'message' ) // <13>
+expect { result }.to throw_symbol( :symbol, 'value' ) // <14>
+expect( :a => 5 ).to have_key( :a ) // <15>
+expect( [3,4,5] ).to include( 5 ) // <16>
+expect( [1, 2, 3] ).to contain_exactly( 2, 1, 3 ) // <17>
+expect( [1, 2, 3] ).to match_array( [3, 2, 1] ) // <18>
+expect( 1..10 ).to cover( 3 ) // <19>
+expect { a += 3 }.to change { a }.by_at_least(2) // <20>
+expect( actual ).to satisfy { |value| value == expected } // <21>
+expect { actual }.to output("some output").to_stdout // <22>
+expect { actual }.to output("some error").to_stderr // <23>
+expect { |b| [1, 2, 3].each( &b )   }.to yield_successive_args( 1, 2, 3 ) // <24>
+----
+<1> Object equivalence
+<2> Object identity
+<3> Object comparison
+<4> Expecting the result to be greater than 4 and less than 9
+<5> You can use regular expressions
+<6> `be_within` is useful for asserting on values that are always changing (like CPU usage)
+<7> Expecting the result to start with a string
+<8> If the result had a method that was name "login", this would pass
+<9> Expecting result to be true
+<10> If `result.nil?` returns true, then this would pass
+<11> If result is an empty array, this would pass
+<12> This passes if `result.exist?` or `result.exists?`
+<13> Notice how this expect is a block. You are expecting the result to raise an exception.
+<14> The `throw_symbol` matcher is used to specify that a block of code throws a symbol.
+<15> This is useful for API result hashes to verify that an API returns the correct keys
+<16> Make sure a list of values includes something you are expecting
+<17> This a way to test arrays against each other in a way that disregards differences in the ordering between the actual and expected array.
+<18> Same matcher as `contains_exactly`, just a different name
+<19> Useful for ranges
+<20> Change observation
+<21> The `satisfy` matcher is extremely flexible and can handle almost anything you want to
+specify
+<22> Useful for making sure something is outputted to the screen
+<23> Make sure an error is printed out to standard error
+<24> `yield_successive_args` is designed for iterators, and will match if the method-under-test yields the same number of times as arguments passed to this matcher, and all actual yielded arguments match the expected ones using === or ==
+
+For full documentation with many more examples see https://relishapp.com/rspec/rspec-expectations/v/3-3/docs/built-in-matchers
+
+=== Metadata
+
+Metadata can be specified on a *describe*, *context*, and *it* blocks at any level in the spec.  However, normally you would put all your metadata at the beginning of the spec in the first *describe*.
+
+[source,ruby]
+----
+describe 'Zones',
+  tags:        ['basic'], // <1>
+  sys_helpers: ['zones'], // <2>
+  helpers:     ['authentication'], // <3>
+  loadout:     { esms: 2, recs: 3 }, // <4>
+  owner:       ['First Last', 'First_Last@McAfee.com'] do // <5>
+
+  it 'some example' do
+  end
+end
+----
+<1> *tags* can be anything you want, but the supported ones in the official test runs are 'bvt', 'basic', 'acceptance', and 'comprehensive'. You can run all tests that match a certain tag. See https://www.relishapp.com/rspec/rspec-core/v/3-3/docs/command-line/tag-option
+<2> *sys_helpers* are helpers for _system tests_. They are located under _automation/helpers_. If you want to use a helper in a spec, you must specify it here first. You can add this tag at any level of your spec, including in a specific example that uses that helper. icon:video-camera[]  http://automation.ida.lab:8000/mp4/rspec_sys_helpers.mp4[Using helpers in Rspec^]
+<3> *helpers* are helpers for _e2e tests_.
+<4> *loadout* is where you can specify how many of each device type your test needs to run. If you only need 1 esm and 1 of each device type, you do not need to use loadouts. icon:video-camera[]  http://automation.ida.lab:8000/mp4/rspec_loadouts.mp4[Using loadouts in Rspec^]
+<5> *owner* is the author of the spec, or at least the one taking responsibility for it. You can have multiple owners by specifying it as a nested array: `[['Name1', 'Email1'], ['Name2', 'Email2']]`.
+
+video::http://automation.ida.lab:8000/mp4/rspec_tags_and_dry_run.mp4[width=500, title="Rspec tags and dry run", poster="http://automation.ida.lab:8000/thumbnails/rspec_tags_and_dry_run.jpg"]
+
+=== Advanced RSpec structure
+
+[source,ruby]
+----
+describe 'System Information' do
+  before :all do
+    @system_information = Helpers::SystemInformation.new
+  end
+
+  context 'Hardware' do
+    let( :hardware ) { @system_information.hardware } // <1>
+
+    context 'CPU' do // <2>
+      subject { hardware[:cpu] } // <3>
+      let( :expected_model ) { @esm.cmd( 'cat /proc/cpuinfo' ).chomp.strip }
+      let( :expected_count ) { @esm.cmd( 'grep -c processor /proc/cpuinfo' ).chomp.to_i }
+
+      its( [:model] ) { is_expected.to eq expected_model } // <4>
+      its( [:count] ) { is_expected.to eq expected_count }
+      its( [:load] )  { is_expected.to be >= 0.0 }
+    end
+
+    context 'RAM' do
+      subject { hardware[:ram] }
+
+      its( [:available] ) { is_expected.to be >= 0 }
+      its( [:used] )      { is_expected.to be > 0 }
+      its( [:free] )      { is_expected.to be >= 0 }
+    end
+  end
+end
+----
+<1> Use `let` to set a variable that you want to use in any context and example nested below it.
+<2> You can have nested context blocks to help you organize your code further.
+<3> You can set the testing subject in a `subject` block. Note that it is using the variable set in the `let` block above.
+<4> Because a subject was set in this context, you can refer to it implicitly. This line states (in English) that "its model is expected to equal the expected model". Who? The subject. So it could also read "The subject's model is expected...", or "The hardware CPU's model is expected...".
+
+== Helper structure
+
+NOTE: This section is not yet written.
+
+== Wrapper structure
+
+NOTE: This section is not yet written.
+
+== Test framework niceties
+
+NOTE: This section is not yet written.
+
+=== Loadouts
+
+video::http://automation.ida.lab:8000/mp4/rspec_loadouts.mp4[width=500, title="Using loadouts in Rspec", poster="http://automation.ida.lab:8000/thumbnails/rspec_loadouts.jpg"]
+
+=== Resources
+
+video::http://automation.ida.lab:8000/mp4/cool_things_resources.mp4[width=500, title="Resources", poster="http://automation.ida.lab:8000/thumbnails/cool_things_resources.jpg"]
+
+=== Debug
+
+When M^3 was used for testing, the Helper class was designed to either use the debug method to output text to the terminal window or use the log method to output text to a file. When using the spec_helper in core/automation/spec, RSpec tests also have a debug command to make switching from M^3 tests to RSpec tests easier.
+
+To output a message to terminal using debug during a test, simply call `debug( "Message here...")`.
+
+Unlike M^3, RSpec has "context" and "describe" blocks. The purpose of context and describe blocks are to improve readability of RSpec Tests. However, using debug inside a context or describe scope can have strange results. The debug and puts methods used in a context or describe block display their message before any test is run.
+
+As a result, avoid using debug inside context or describe scopes. If you'd like to add a debug in your context before a test is run, call debug in a 'before' or an 'after' block.
+
+== Writing documentation
+
+video::http://automation.ida.lab:8000/mp4/writing_yardoc.mp4[width=500, title="Writing yardoc", poster="http://automation.ida.lab:8000/thumbnails/writing_yardoc.jpg"]

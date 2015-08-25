@@ -1,0 +1,74 @@
+---
+title: Test Structure
+authors:
+  - name: Eric Terry
+    email: Eric_Terry@McAfee.com
+  - name: Nathan Bitikofer
+    email: Nathan_Bitikofer@McAfee.com
+  - name: Matt Meng
+    email: matt.meng@intel.com
+  - name: Matt Hulse
+    email: Matt_Hulse@McAfee.com
+layout: page
+---
+
+:page-layout: base
+:toc: right
+:icons: font
+:idprefix:
+:idseparator: -
+:sectanchors:
+:source-highlighter: highlight.js
+:mdash: &#8212;
+:language: asciidoc
+:source-language: {language}
+:table-caption!:
+:example-caption!:
+:figure-caption!:
+:linkattrs:
+
+NOTE: http://rspec.info/[RSpec^] is the open-source testing framework we use for all _system tests_ and _e2e tests_.  In this section, we will be talking about the general principles of a test structure.  Further below in this document are specifics of the test structure according to RSpec.
+
+=== Setup
+
+Use the concept of a *setup* to create resources the test needs to correctly test a given feature. For example: if the test requires certain users, data sources, or other settings to be enabled or disabled; then the test creates those resources in the setup. Setup is not the place to do any testing. This means that there shouldn't be any asserts.
+
+You can have one setup for the entire test file and/or multiple setups for certain groups of test cases.  You can also have a setup that runs before every test case.
+
+NOTE: RSpec uses `before :all` blocks for a setup that runs once before all tests cases and `before :each` blocks for a setup that runs before every test case.
+
+=== Teardown
+
+The concept of *teardown* can be used in a test to remove the resources that were *setup* as well as anything that was created during a test case. This is referred to as "cleaning up after yourself" or "Leave No Trace". For example, if I create a user called _user1_ in the setup, my teardown should remove that user. If not, then the next test might fail because it is not expecting a _user1_ to already exist. You can also have a teardown that runs after every test case.
+
+TIP: You can use the *Snapshot* helper to revert the environment back to how it was before you ran your test.  This makes tearing down your test much easier.  icon:video-camera[]  http://automation.ida.lab:8000/mp4/snapshot_create_and_revert.mp4[Snapshots^]
+
+NOTE: RSpec uses `after :all` blocks for a teardown that runs once after all tests cases and `after :each` blocks for a teardown that runs after every test case.
+
+=== Test case
+
+IMPORTANT: A test case dependency occurs when a test case uses something that was created in a previous test case. Most commonly that something is a member/instance variable. Member variables are variables that are preceded with an @ symbol in ruby. Test case dependencies are a bad practice. If member variables are used, they should be declared and initialized in the setup, not in a test case. This is the reason why: there is a good possibility that the test case will error out before that variable is set. If that variable doesn't get set it will cause the next test case to fail, because it was "depending" on that variable. The main idea here is that test cases should be 100% independent from any other test case. This means that all cases should be able to run in _any order_ and _by itself_.
+
+A test case should be independent of any other test case.  There should also be only one assert per test case.  This makes it easier to figure out what went wrong and why when a test case fails.  A good methodology to use when writing a test case is *Arrange, Act, Assert*.  This helps organize a test case and makes sure you are only testing one thing per test case.  Read more about it here:  http://www.arrangeactassert.com/why-and-what-is-arrange-act-assert/
+
+[source,ruby]
+----
+describe 'Math' do
+  before( :all ) { @calculator = Calculator.new }
+
+  context 'Addition' do
+    # Arrange // <1>
+    let( :first_number ) { 5 }
+    let( :second_number ) { 3 }
+
+    # Act // <2>
+    subject { @calculator.add( first_number, second_number ) }
+
+    # Assert // <3>
+    it { is_expected.to eq 8 }
+  end
+end
+----
+<1> *Arrange* all necessary preconditions and inputs.
+<2> *Act* on the object or method under test.
+<3> *Assert* that the expected results have occurred.

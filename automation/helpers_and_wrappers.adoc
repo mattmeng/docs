@@ -1,0 +1,69 @@
+---
+title: Helpers and Wrappers
+authors:
+  - name: Eric Terry
+    email: Eric_Terry@McAfee.com
+  - name: Nathan Bitikofer
+    email: Nathan_Bitikofer@McAfee.com
+  - name: Matt Meng
+    email: matt.meng@intel.com
+  - name: Matt Hulse
+    email: Matt_Hulse@McAfee.com
+layout: page
+---
+
+:page-layout: base
+:toc: right
+:icons: font
+:idprefix:
+:idseparator: -
+:sectanchors:
+:source-highlighter: highlight.js
+:mdash: &#8212;
+:language: asciidoc
+:source-language: {language}
+:table-caption!:
+:example-caption!:
+:figure-caption!:
+:linkattrs:
+
+System tests have the concept of helpers and wrappers.  Systems tests typically use the API to interact with the product.  Because interacting directly with the raw API is very messy, we use wrappers.  Because there is common functionality we want to share between tests, we use helpers.
+
+TIP: If you cannot play the videos, try using Chrome or try right clicking on the video and selecting "View Video" or "Open video in new tab".
+
+video::http://automation.ida.lab:8000/mp4/test_types_helpers_and_wrappers.mp4[width=500, title="Helpers and wrappers", poster="http://automation.ida.lab:8000/thumbnails/test_types_helpers_and_wrappers.jpg"]
+
+=== Wrappers
+
+TIP: View detailed documentation for all wrappers at http://automation.ida.lab:1234/docs/wrappers/frames
+
+video::http://automation.ida.lab:8000/mp4/rspec_wrappers.mp4[width=500, title="Using wrappers in Rspec", poster="http://automation.ida.lab:8000/thumbnails/rspec_wrappers.jpg"]
+
+API wrappers provide a much friendlier interface to the raw API.  They convert ruby-ized values and types to what the raw API request requires.  They also take the raw response from the API and convert it to ruby-ized values.
+
+This makes it so that test writers don't have to worry about DC1 and DC2 lists, CSV lists, T and F booleans, 0 and 1 booleans, yes and no booleans, nested arrays and hashes in the raw API format, strings vs integers, etc.  A test writer would just have to pass in a boolean "true" and the wrapper would automatically convert it to T, 1, or yes depending on the specified type for the argument in the wrapper. So a test would use normal ruby Fixnums, Strings, Hashes, Arrays, and Booleans for all arguments passed to an API wrapper.
+
+video::http://automation.ida.lab:8000/mp4/my_first_m3_wrapper.mp4[width=500, title="My first wrapper", poster="http://automation.ida.lab:8000/thumbnails/my_first_m3_wrapper.jpg"]
+
+video::http://automation.ida.lab:8000/mp4/advanced_m3_wrappers.mp4[width=500, title="Advanced wrappers", poster="http://automation.ida.lab:8000/thumbnails/advanced_m3_wrappers.jpg"]
+
+For detailed documentation on how to create/modify wrappers, see:  http://automation.ida.lab:1234/docs/m3/file/docs/wrappers.md
+
+=== Helpers
+
+TIP: View detailed documentation for all helpers at http://automation.ida.lab:1234/docs/helpers/frames
+
+Helpers provide a way of putting commonly used functionality into a common location which can be accessed in a test.
+
+video::http://automation.ida.lab:8000/mp4/my_first_m3_helper.mp4[width=500, title="My first helper", poster="http://automation.ida.lab:8000/thumbnails/my_first_m3_helper.jpg"]
+
+System helpers usually should be designed to represent an object in the product.  For example, there could be a helper created for Users.  This helper would have methods defined such as create, delete, edit, assign_group, change_password, etc.  Many tests would want to use a Users helper to create a test user before testing the product.  Requiring every test writer to know the exact API calls and parameters needed to add a user would be time consuming and error-prone.  Helpers provide a higher level for a test writer to perform certain actions.
+
+Let's say that adding a user took 6 API calls that each took many parameters.  If this code was _copied and pasted_ in 30 tests, and one of the API parameters changed in middleware, it would required fixing 30 tests!  However, if those 6 API calls were in a helper method and those 30 tests all used that common helper, then the change would only have to be applied once in only 1 file.
+
+"The developer who learns to recognize duplication, and understands how to eliminate it through appropriate practice and proper abstraction, can produce much cleaner code than one who continuously infects the application with unnecessary repetition."
+-- Steve Smith, Don't Repeat Yourself (DRY)
+
+Another use case for helpers is when, as a test writer, you want to test a specific functionality, but in order to get the product in a state where that functionality is testable, many things have to be setup.  You shouldn't have to care or know _how_ to get the product in that state.  After all, that is not the _point_ of the test!  If many helpers are created and well documented, a test writer could just use a helper or two to get the box in the correct state.  After in the correct state, the test writer could then write the actual test they cared about in the first place.
+
+video::http://automation.ida.lab:8000/mp4/rspec_sys_helpers.mp4[width=500, title="Using helpers in Rspec", poster="http://automation.ida.lab:8000/thumbnails/rspec_sys_helpers.jpg"]

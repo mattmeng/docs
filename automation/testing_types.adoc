@@ -1,0 +1,117 @@
+---
+title: Types of Testing
+authors:
+  - name: Eric Terry
+    email: Eric_Terry@McAfee.com
+  - name: Nathan Bitikofer
+    email: Nathan_Bitikofer@McAfee.com
+  - name: Matt Meng
+    email: matt.meng@intel.com
+  - name: Matt Hulse
+    email: Matt_Hulse@McAfee.com
+layout: page
+---
+
+:page-layout: base
+:toc: right
+:icons: font
+:idprefix:
+:idseparator: -
+:sectanchors:
+:source-highlighter: highlight.js
+:mdash: &#8212;
+:language: asciidoc
+:source-language: {language}
+:table-caption!:
+:example-caption!:
+:figure-caption!:
+:linkattrs:
+
+There are three main types of tests.  Unit tests, system tests, and end-to-end (e2e) tests.
+
+=== Unit tests
+
+A true, pure unit test:
+
+* Doesn't require a running system of the product
+* Is written in the same language as the source code
+* Run extremely fast
+* Directly interacts with methods/functions/objects of the code
+* Only tests certain pieces and parts of the product at certain levels
+
+Unit tests are the first level of defensive.  In a http://www.thoughtworks.com/continuous-integration[Continuous Integration (CI)] environment, every commit to the source core repository runs these tests.  Feedback can immediately be provided back to the developer on the results of these tests.  Unit tests run on Jenkins and have the power to fail the build.
+
+=== System tests
+
+WARNING: These types of tests are gradually being phased out in favor of pure unit tests and end-to-end tests.  This is because of maintenance costs associated with system tests.
+
+A system test:
+
+* Requires a running system of the product
+* Is language agnostic (we use Ruby)
+* Runs slower than unit tests
+* Indirectly tests the code usually via the API
+* Does not test the complete system from backend through middleware to the frontend
+
+System tests have been the main type of automated testing here for the SIEM, usually by directly interacting with the API.  These tests can also interact directly with the command line (via SSH) and the database (via SQL).  Wrappers have been created for the API that makes it easier to interact with the API using Ruby.  The cost of keeping these wrappers (and thus helpers and tests) up to date with the product is high.
+
+=== End-to-end tests
+
+CAUTION: Currently we can only test the new GUI with end-to-end tests.
+
+An end-to-end (e2e) test:
+
+* Requires a running system of the complete product
+* Is language agnostic (we use Ruby)
+* Runs slower than system tests
+* Directly interacts with the frontend GUI via a browser
+* Tests the complete product from the frontend through middleware to the backend and back up
+
+End-to-end tests are not possible with a Flash frontend.  This is why we have never written these types of tests here until now.  With the new GUI for the SIEM, this now becomes possible.  E2e tests simulate key presses and mouse clicks on an actual Internet browser.
+
+== Levels of testing
+
+There are four levels of testing that we endorse and support here.  These levels of tests are only applicable to system tests and e2e tests, not unit tests.
+
+[NOTE]
+====
+.icon:clock-o[] How long should a test generally take to run?
+* *BVT* - Less than 1 minute
+* *Basic* - Less than 5 minutes
+* *Acceptance* - Between 5 and 20 minutes
+* *Comprehensive* - Longer than 20 minutes
+====
+
+=== Build verification tests
+
+Build Verification Tests, or BVT's for short, are very fast running tests that make sure the build is good and testable.  If any of the BVT tests fail, the entire test run is terminated.  Basic, Acceptance, and Comprehensive tests will not run.
+
+"Running a BVT before initiating a full test run is important because it lets developers know right away if there is a serious problem with the build, and they save the test team wasted time and frustration by avoiding test of an unstable build."
+-- Wikipedia, Build verification test
+
+BVT's should not test specific features in the product, but rather make sure core functionality is working enough for the rest of the tests to even be worth running.  They should be extremely stable and always have known expected results.
+
+=== Basic tests
+
+TIP: When a feature is automated, you should consider writing more than just one test for it.  It is often helpful to write a Basic, Acceptance, and Comprehensive test for it.
+
+A basic test is one that tests a feature or area of the product, but doesn't go into a lot of detail.  These should be quick running tests that do a "quick pass" to make sure core functionality of the feature is working properly.  For instance, a basic test could test one scenario with default options (even though the feature has many scenarios).
+
+As an example, if you are testing a form on a web page, you would make sure you can fill out the form with valid data and submit it and get a proper response.  An acceptance or comprehensive test could run a similar test, but maybe enable a checkbox, fill in optional input boxes, and try filling out the form with invalid data.
+
+=== Acceptance tests
+
+This is the most common level of testing that we have here.  An acceptance test should verify that the feature works as intended for _most_ scenarios.  This is a higher detail level of testing than Basic tests, but not as detailed as Comprehensive tests.
+
+TIP: It is recommended that you write your test before developing the feature.  This is known as Test Driven Development.  But only do this if it makes sense for you and the situation.
+
+=== Comprehensive tests
+
+A comprehensive test usually takes longer than 20 minutes to run and tests most of the scenarios of a feature.  They should include many failure scenarios as well (tests that make sure the system fails properly when something invalid is performed).  Comprehensive tests could also use the concept of data-driven testing, where the variety of inputs to a test would be in a file or an array and looped through.
+
+[NOTE]
+====
+.icon:table[] Data-driving testing
+"Anything that has a potential to change (also called variability, and includes elements such as environment, end points, test data, locations, etc.) is separated out from the test logic (scripts) and moved into an 'external asset'. This can be a configuration or test dataset. The logic executed in the script is dictated by the data values."
+-- Wikipedia, Data-driven testing
+====
