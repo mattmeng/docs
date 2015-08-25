@@ -11,9 +11,9 @@ body {
   margin: 0px;
   height: 100%;
   color: $text-color;
-  font-family: 'inconsolata';
+  font-family: $base-font-family;
   font-size: $base-font-size;
-  line-height: 18px;
+  line-height: $base-line-height;
   overflow: hidden;
 }
 

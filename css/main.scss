@@ -12,13 +12,14 @@
 
 // Our variables
 $base-font-family: inconsolata;
-$base-font-size:   18px;
+$base-font-size:   16px;
 $small-font-size:  $base-font-size * 0.875;
-$base-line-height: 1.5;
+$base-line-height: 20px;
+$code-font-family: inconsolata;
 
 $spacing-unit:     30px;
 
-$text-color:       #333;
+$text-color:       black;
 $background-color: #fdfdfd;
 $brand-color:      #2a7ae2;
 

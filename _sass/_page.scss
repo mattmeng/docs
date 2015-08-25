@@ -8,12 +8,12 @@
   width: calc(100% - 260px);
   height: 100%;
   overflow: auto;
-  color: #555;
-  font-family: 'inconsolata';
+  color: $text-color;
+  font-family: $base-font-family;
   font-size: $base-font-size;
-  line-height: 18px;
+  line-height: $base-line-height;
   padding: 30px 20px;
-  padding-right: 400px;
+  padding-right: 30%;
 
   @media all and ( max-width: 1600px ) {
     padding-right: 20%;
@@ -133,6 +133,8 @@
   dl {
     dt {
       font-weight: bold;
+      line-height: $base-line-height;
+      padding-top: 4px;
     }
   }
 
