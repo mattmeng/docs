@@ -1,17 +1,8 @@
 ---
 layout: default
 ---
-<header>
-  <h1 class="post-title">{{ page.title }}</h1>
-  {% if page.authors %}
-    <h3>By
-      {% for author in page.authors %}
-        {% if forloop.last and forloop.length > 1 %}and {% endif %}{{ author.name }} &lt;<a href="mailto:{{ author.email }}" class="email">{{ author.email }}</a>&gt;{% if forloop.rindex > 2 %},{% endif %}
-      {% endfor %}
-    </h3>
-  {% endif %}
-</header>
+{% include header.html %}
 
-<article class="post-content">
+<article id='article' class="post-content">
   {{ content }}
 </article>

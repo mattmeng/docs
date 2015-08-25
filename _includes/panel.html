@@ -6,9 +6,9 @@
     <span></span>
   </a>
   <div class='tabs'>
-    <a onclick="changeTab( 'index' )" href='#'>Index</a> |
-    <a onclick="changeTab( 'toc' )" href='#'>TOC</a> |
-    <a onclick="changeTab( 'posts' )" href='#'>Blog</a>
+    <a id='tab_index' onclick="changeTab( 0 )" href='#'>Index</a> |
+    <a id='tab_toc' onclick="changeTab( 1 )" href='#'>TOC</a> |
+    <a id='tab_posts' onclick="changeTab( 2 )" href='#'>Blog</a>
   </div>
   <div class="filterBlock" >
     <input type="text" id="filterInput" placeholder="Type to filter"/>
@@ -19,7 +19,6 @@
 </div>
 <script>
   var panel = document.getElementById( 'panel' );
-  var viewer = document.getElementById( 'viewer' );
 
   var expandButton = document.getElementById( 'expandButton' );
   expandButton.addEventListener( 'click', function( event ) {
@@ -30,14 +29,10 @@
   var filterInput = document.getElementById( 'filterInput' );
   var clearFilterButton = document.getElementById( 'clearFilterButton' );
 
-  var DELIMITER = '/';
-  var MEMBER_DELIMITER = '.';
-  var nameCategoryMap = {};
-  var sections = {};
-
   var content = document.getElementById( 'content' );
+  var article = document.getElementById( 'article' );
 
-  var current_tab = 'index';
+  var current_tab = 0;
   var tab_list = [
     {{ site.data['index'] }},
     [],
@@ -47,20 +42,29 @@
   function createList( list ) {
     // Remove all children (faster and more efficient than innerHTML)
     while( content.firstChild ) { content.removeChild( content.firstChild ) }
+    var title = null;
+
+    if( list.length == 0 )
+      content.innerHTML = '<p>No Matches</p>'
 
     for( var section in list ) {
       section = list[section];
       var h2 = document.createElement( 'h2' );
+      h2.className = 'section';
+
+      if( typeof section['title'] !== "undefined" )
+        title = section['title'];
+      else
+        title = '';
 
       if( typeof section['url'] !== "undefined" ) {
         var a = document.createElement( 'a' );
         a.setAttribute( 'href', section['url'] );
-        a.textContent = section['title'];
+        a.innerHTML = title;
         h2.appendChild( a );
       }
-      else {
-        h2.textContent = section['title'];
-      }
+      else
+        h2.innerHTML = title;
 
       content.appendChild( h2 );
 
@@ -70,15 +74,21 @@
         var h3 = document.createElement( 'h3' );
         var ul = document.createElement( 'ul' );
 
+        h3.className = 'chapter';
+        if( typeof chapter['title'] !== "undefined" )
+          title = chapter['title'];
+        else
+          title = '';
+
         if( typeof chapter['url'] !== "undefined" ) {
           var a = document.createElement( 'a' );
           a.setAttribute( 'href', chapter['url'] );
-          a.textContent = chapter['title'];
+          a.innerHTML = title
           h3.appendChild( a );
         }
-        else {
-          h3.textContent = chapter['title'];
-        }
+        else
+          h3.innerHTML = title;
+
         div.appendChild( h3 );
         div.appendChild( ul );
 
@@ -87,8 +97,14 @@
           var li = document.createElement( 'li' );
           var a = document.createElement( 'a' );
 
+          if( typeof page['title'] !== "undefined" )
+            title = page['title'];
+          else
+            title = '';
+
+          li.className = 'page';
           a.setAttribute( 'href', page['url'] );
-          a.textContent = page['title'];
+          a.innerHTML = title;
           li.appendChild( a );
           ul.appendChild( li );
         }
@@ -98,75 +114,79 @@
     }
   }
 
-  function updateFilter() {
+  function updateFilter( tab ) {
+    if( filterInput.value == '' ) {
+      return tab_list[tab];
+    }
 
+    var exp = new RegExp( filterInput.value, 'gi' );
+
+    // Cheap and effective object copy, because Javascript doesn't have
+    // an easier way to do this.
+    var filtered_list = JSON.parse( JSON.stringify( tab_list[tab] ) );
+
+    for( var section_index = filtered_list.length - 1; section_index >= 0; section_index-- ) {
+      var section = filtered_list[section_index];
+
+      for( var chapter_index = section['contents'].length - 1; chapter_index >= 0; chapter_index-- ) {
+        var chapter = section['contents'][chapter_index];
+
+        for( var page_index = chapter['contents'].length - 1; page_index >= 0; page_index-- ) {
+          var page = chapter['contents'][page_index];
+          var res = page['title'].match( exp );
+
+          if( res && res.length > 0 ) {
+            page['title'] = page['title'].replace( exp, function( match ) {
+              return '<b>' + match + '</b>';
+            } );
+          }
+          else {
+            chapter['contents'].splice( page_index, 1 );
+          }
+        }
+
+        if( chapter['contents'].length <= 0 ) {
+          section['contents'].splice( chapter_index, 1 );
+        }
+      }
+
+      if( section['contents'].length <= 0 ) {
+        filtered_list.splice( section_index, 1 );
+      }
+    }
+
+    return filtered_list;
   }
 
   function changeTab( tab ) {
+    document.getElementById( 'tab_index' ).className = '';
+    document.getElementById( 'tab_toc' ).className = '';
+    document.getElementById( 'tab_posts' ).className = '';
+
     switch( tab ) {
-      case 'toc':
-        var index = 1;
+      case 0:
+        document.getElementById( 'tab_index' ).className = 'bold';
         break;
-      case 'posts':
-        var index = 2;
+      case 1:
+        document.getElementById( 'tab_toc' ).className = 'bold';
         break;
-      default:
-        var index = 0;
+      case 2:
+        document.getElementById( 'tab_posts' ).className = 'bold';
     }
 
-    createList( tab_list[index] );
+    current_tab = tab;
+    createList( updateFilter( current_tab ) );
   }
 
   filterInput.addEventListener( 'input', function( e ) {
-    updateFilter();
+    createList( updateFilter( current_tab ) );
+  } );
+
+  clearFilterButton.addEventListener( 'click', function( e ) {
+    filterInput.value = '';
+    createList( updateFilter( current_tab ) );
+    e.preventDefault();
   } );
 
   changeTab( current_tab );
-
-      // function layoutList() {
-      //   sections.forEach( function( el ) {
-      //     var collapsed = true;
-
-      //     Array.prototype.slice.apply( el.children ).forEach( function( item ) {
-      //       if( !item.classList.contains( 'filtered' ) ) {
-      //         collapsed = false;
-      //         return;
-      //       }
-      //     } );
-      //     if( collapsed ) {
-      //       el.parentElement.classList.add( 'filtered' );
-      //     } else {
-      //       el.parentElement.classList.remove( 'filtered' );
-      //     }
-      //   } );
-      // }
-
-
-      // clearFilterButton.addEventListener( 'click', function( e ) {
-      //   filterInput.value = '';
-      //   updateFilter();
-      //   e.preventDefault();
-      // } );
-
-      // function updateFilter() {
-      //   var exp = new RegExp( filterInput.value, 'gi' );
-
-      //   for( var j in nameCategoryMap ) {
-      //     var res = nameCategoryMap[ j ].name.match( exp );
-
-      //     if( res && res.length > 0 ) {
-      //       nameCategoryMap[ j ].element.parentElement.classList.remove( 'filtered' );
-      //       var str = nameCategoryMap[ j ].name;
-
-      //       for( var i = 0; i < res.length; i++ ) {
-      //         str = str.replace( res[ i ], '<b>' + res[ i ] + '</b>' );
-      //       }
-      //       nameCategoryMap[ j ].element.innerHTML = str;
-      //     } else {
-      //       nameCategoryMap[ j ].element.parentElement.classList.add( 'filtered' );
-      //       nameCategoryMap[ j ].element.textContent = nameCategoryMap[ j ].name;
-      //     }
-      //   }
-      //   layoutList();
-      // }
-    </script>
+</script>

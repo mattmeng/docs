@@ -13,6 +13,10 @@
     margin-left: 20px;
     font-size: 25px;
     font-weight: normal;
+
+    @include media-query( $on-mobile ) {
+      margin-top: 20px;
+    }
   }
 
   h2 {
@@ -31,6 +35,10 @@
 
     margin-top: 20px;
     margin-left: 20px;
+  }
+
+  p {
+    text-align: center;
   }
 
   a {
@@ -95,6 +103,10 @@
 
   .filtered {
     display: none;
+  }
+
+  .bold {
+    font-weight: bold;
   }
 }
 
