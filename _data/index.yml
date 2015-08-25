@@ -5,13 +5,15 @@
       contents:
         - path: /automation/intro.adoc
         - path: /automation/setup.adoc
-    - title: Process and Tools
-      contents:
         - path: /automation/testing_types.adoc
-        - path: /automation/test_structure.adoc
-        - path: /automation/helpers_and_wrappers.adoc
+    - title: Tools
+      contents:
         - path: /automation/rspec.adoc
         - path: /automation/other_tools.adoc
+    - title: Process
+      contents:
+        - path: /automation/test_structure.adoc
+        - path: /automation/helpers_and_wrappers.adoc
         - path: /automation/writing_tests.adoc
     - title: Additional Information
       contents:
