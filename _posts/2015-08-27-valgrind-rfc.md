@@ -20,6 +20,8 @@ categories: rfc valgrind
 
 Steve Ridges asked us in the SI team to look into a memory profiler called Valgrind, to begin to assess memory leak issues that Core may be able to analyze and fix in the product. After research and proof of concepts, we have generated the following findings. We encourage and welcome any and all input as we try to develop an action plan for all involved parties moving forward.
 
+If you have comments about the document below, please leave a comment on the forum post for this topic found [here](http://discourse.ida.lab/t/valgrind-memory-profiler/23).
+
 ## Valgrind Findings and Action Plan
 
 ### Database (`dbserver`)
@@ -75,3 +77,9 @@ Steve Ridges asked us in the SI team to look into a memory profiler called Valgr
   * It would read the Valgrind flag in the Jenkins build arguments from the Jenkins notification post
   * Adjust timeouts
   * Downloads XML files from the ESM and attaches them to the report emails
+
+## Action Plan Dependencies
+
+Several items in the above action plan rely upon the completion of other items in the plan. The graph below illustrates the dependencies between the various tasks, as well as which task should be completed by core engineering (blue) and which should be completed by the Systems Integration Team (red). Tasks with no dependencies are indicated with a bold border.
+
+![Valgrind Task Dependency Graph](/files/valgrind_partial_order.png)
