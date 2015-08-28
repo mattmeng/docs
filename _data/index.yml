@@ -25,7 +25,9 @@
         - path: /git/stories.md
 - title: Core Engineering
   contents:
-    - title: Documentation
+- title: Support
+  contents:
+    - title: Supportability Documents
       contents:
         - path: /core_docs
-          title: Supportability Docs
+          title: Gollum Documentation
