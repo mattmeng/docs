@@ -145,12 +145,12 @@
           }
         }
 
-        if( chapter['contents'].length <= 0 ) {
+        if( 'contents' in chapter ? chapter['contents'].length <= 0 : true ) {
           section['contents'].splice( chapter_index, 1 );
         }
       }
 
-      if( section['contents'].length <= 0 ) {
+      if( 'contents' in section ? section['contents'].length <= 0 : true ) {
         filtered_list.splice( section_index, 1 );
       }
     }
