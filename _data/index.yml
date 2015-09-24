@@ -20,9 +20,10 @@
         - path: /automation/big_picture.adoc
 - title: Git
   contents:
-    - title: FAQ
+    - title: FAQ and Helpful Hints
       contents:
         - path: /git/stories.md
+        - path: /git/cool_commands.md
 - title: Core Engineering
   contents:
 - title: Support
