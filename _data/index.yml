@@ -24,8 +24,6 @@
       contents:
         - path: /git/stories.md
         - path: /git/cool_commands.md
-- title: Core Engineering
-  contents:
 - title: Support
   contents:
     - title: Supportability Documents
