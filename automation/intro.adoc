@@ -3,12 +3,6 @@ title: Introduction
 authors:
   - name: Eric Terry
     email: Eric_Terry@McAfee.com
-  - name: Nathan Bitikofer
-    email: Nathan_Bitikofer@McAfee.com
-  - name: Matt Meng
-    email: matt.meng@intel.com
-  - name: Matt Hulse
-    email: Matt_Hulse@McAfee.com
 layout: page
 ---
 
@@ -35,21 +29,23 @@ Welcome to the System Integration Team's (SIT) documentation page for automated 
 
 .SIEM testing history
 ****
-mailto://Matt_Hulse@McAfee.com[Matt Hulse] created the first https://www.ruby-lang.org[Ruby^] testing tool here back in 2009.  *NitroDB* was a Ruby Gem that could interact with the database.  A couple years later in 2011, he wrote *NitroAPI* in Ruby, which could call API's.  This was the beginning of automated testing in Ruby for the SIEM.
+mailto:Matt_Hulse@McAfee.com[Matt Hulse] created the first https://www.ruby-lang.org[Ruby^] testing tool here back in 2009.  *NitroDB* was a Ruby Gem that could interact with the database.  A couple years later in 2011, he wrote *NitroAPI* in Ruby, which could call API's.  This was the beginning of automated testing in Ruby for the SIEM.
 
-http://whiteboard.ida.lab[Whiteboard^] was born early in 2012 by mailto://Kelly_Jensen.McAfee.com[Kelly Jensen].  It's purpose initially was only for ISOing and setting up SIEM environments using the *NitroAPI* gem Matt wrote.
+http://whiteboard.ida.lab[Whiteboard^] was born early in 2012 by mailto:Kelly_Jensen.McAfee.com[Kelly Jensen].  It's purpose initially was only for ISOing and setting up SIEM environments using the *NitroAPI* gem Matt wrote.
 
-In Fall 2012, mailto://Thomas_Constantino@McAfee.com[Tom Constantino] (the QA Manager at the time) gave Kelly the task of creating a framework for running automated tests.  This was a high priority task and time was limited.  https://github.com/ruby/rake[Rake^], a make-like build utility for Ruby, seemed like the best tool to run these tests at the time.  A *Test Runner* was created which could run these *Rake* tests.  All of the QA department then jumped onboard to learn Ruby and start writing automation.  *Whiteboard* morphed into not only setting up environments, but now running tests against them and generating reports and emails.
+In Fall 2012, mailto:Thomas_Constantino@McAfee.com[Tom Constantino] (the QA Manager at the time) gave Kelly the task of creating a framework for running automated tests.  This was a high priority task and time was limited.  https://github.com/ruby/rake[Rake^], a make-like build utility for Ruby, seemed like the best tool to run these tests at the time.  A *Test Runner* was created which could run these *Rake* tests.  All of the QA department then jumped onboard to learn Ruby and start writing automation.  *Whiteboard* morphed into not only setting up environments, but now running tests against them and generating reports and emails.
 
-Eventually a dedicated *Automation Team* was created in September 2013. Matt Hulse was chosen as the manager.  mailto://Jefferson_Dewey@McAfee.com[JT Dewey] was hired straight into this team early in 2014 as the first team member.  Kelly officially transitioned to this team shortly thereafter.  mailto://Eric_Terry@McAfee.com[Eric Terry] was the third addition, coming from the QA Department.
+Eventually a dedicated *Automation Team* was created in September 2013. Matt Hulse was chosen as the manager.  mailto:Jefferson_Dewey@McAfee.com[JT Dewey] was hired straight into this team early in 2014 as the first team member.  Kelly officially transitioned to this team shortly thereafter.  mailto:Eric_Terry@McAfee.com[Eric Terry] was the third addition, coming from the QA Department.
 
-In January 2014 mailto://Matt_Meng.McAfee.com[Matt Meng] from the Middleware Department decided he wanted a _sexier_ testing framework for his API tests he was writing.  *M3* was born (a custom in-house testing framework). *M3* became the new standard for writing tests.  Many improvements came from *M3* and development was ongoing.
+In January 2014 mailto:Matt_Meng.McAfee.com[Matt Meng] from the Middleware Department decided he wanted a _sexier_ testing framework for his API tests he was writing.  *M3* was born (a custom in-house testing framework). *M3* became the new standard for writing tests.  Many improvements came from *M3* and development was ongoing.
 
 The *Automation Team* continued development on *M3* and many other testing tools.  Interns would come and go every semester, helping our team with writing tests and developing the automation frameworks and tools.
 
-In March 2015 the *Automation Team* became the *System Integration Team* as part of our transition to Scrum.  That is when mailto://Stuart_Purser@McAfee.com[Stuart Purser], mailto://Matt_Meng.McAfee.com[Matt Meng], and mailto://Scott_Southwick@McAfee.com[Scott Southwick] came onboard, with mailto://Steven_Ridges@McAfee.com[Steve Ridges] as the new manager.
+In March 2015 the *Automation Team* became the *System Integration Team* as part of our transition to Scrum.  That is when mailto:Stuart_Purser@McAfee.com[Stuart Purser], mailto:Matt_Meng.McAfee.com[Matt Meng], and mailto:Scott_Southwick@McAfee.com[Scott Southwick] came onboard, with mailto:Steven_Ridges@McAfee.com[Steve Ridges] as the new manager.
 
 A third (and last) testing framework was agreed upon in May 2015 that would not only provide testing using API's, SQL queries, and SSH commands; but also provide testing the new GUI for the SIEM.  http://rspec.info[RSpec^] can do it all.
+
+Later on that year Scott Southwick and Stuart Purser left our team to be with the new Release Team and mailto:David.Handy@Intel.com[Dave Handy] became the newest member.
 ****
 
 === Why write automated tests?
