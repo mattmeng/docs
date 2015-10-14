@@ -240,6 +240,7 @@ NOTE: This section is not yet written.
 * Don't hard code or assume there is only one ESM or only certain devices keyed to the box. Rather query the IPSID or devices when calling things that require that input.
 * Don't assume you are running against a local ESM, all-in-one, or ETM
 * Use one Esm/NitroView instance per user for testing api calls accross multiple sessions
+* Don't assume you are the only user logged into the box
 
 == Writing e2e tests
 
