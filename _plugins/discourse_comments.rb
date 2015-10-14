@@ -21,6 +21,10 @@ module Jekyll
       @site.posts.each do |post|
         post.content += snippet(post.url)
       end
+
+      @site.pages.each do |page|
+        page.content += snippet( page.url )
+      end
     end
 
     def snippet(url)
