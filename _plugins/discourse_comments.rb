@@ -41,6 +41,8 @@ module Jekyll
 
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
           })();
+
+          $('#discourse-embed-frame').iFrameResize();
         </script>
       EOF
     end
