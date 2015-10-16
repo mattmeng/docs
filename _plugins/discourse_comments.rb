@@ -42,7 +42,7 @@ module Jekyll
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
           })();
 
-          $('#discourse-embed-frame').ready( function() {
+          setTimeout( 1000, function() {
             $('#discourse-embed-frame').iFrameResize( {log: true} );
           } );
         </script>
