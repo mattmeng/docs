@@ -42,9 +42,9 @@ module Jekyll
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
           })();
 
-          setTimeout( 1000, function() {
+          setTimeout( function() {
             $('#discourse-embed-frame').iFrameResize( {log: true} );
-          } );
+          }, 1000 );
         </script>
       EOF
     end
