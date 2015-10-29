@@ -1,0 +1,4 @@
+deploy:
+  script: "wget -qO- http://docs.ida.lab/update/docs > /dev/null"
+  only:
+    - master

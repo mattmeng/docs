@@ -32,10 +32,13 @@
 
     h1 {
       margin: 0px;
+      @include header-1-style;
     }
 
     h3 {
       margin-top: 10px;
+      font-size: $base-font-size;
+      color: $text-color;
 
       .email {
         font-style: italic;
@@ -48,27 +51,21 @@
   }
 
   h1 {
-    color: #333;
-    font-size: 25px;
-    font-weight: normal;
-
     margin-top: 10px;
+
+    @include header-1-style;
   }
 
   h2 {
-    color: $header-color;
-    font-size: 18px;
-    font-weight: normal;
-
     margin-top: 40px;
+
+    @include header-2-style;
   }
 
   h3 {
-    color: #000;
-    font-size: 16px;
-    font-weight: normal;
-
     margin-top: 30px;
+
+    @include header-3-style;
   }
 
   div {
@@ -160,6 +157,20 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  strong {
+    font-weight: bold;
+  }
+
+  ul {
+    li {
+      margin-top: 6px;
+    }
+  }
+
+  #discourse-comments iframe {
+    height: 100%;
   }
 }
 

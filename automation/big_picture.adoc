@@ -3,12 +3,8 @@ title: Automation System Big Picture
 authors:
   - name: Eric Terry
     email: Eric_Terry@McAfee.com
-  - name: Nathan Bitikofer
-    email: Nathan_Bitikofer@McAfee.com
-  - name: Matt Meng
-    email: matt.meng@intel.com
-  - name: Matt Hulse
-    email: Matt_Hulse@McAfee.com
+  - name: Kelly Jensen
+    email: Kelly.Jensen@Intel.com
 layout: page
 ---
 
@@ -27,7 +23,7 @@ layout: page
 :figure-caption!:
 :linkattrs:
 
-NOTE: This section is not yet written.
+image::/files/sit_big_picture.png[Scott-ee Architecture]
 
 video::http://automation.ida.lab:8000/mp4/esm_product_overview.mp4[width=500, title="ESM product overview", poster="http://automation.ida.lab:8000/thumbnails/esm_product_overview.jpg"]
 

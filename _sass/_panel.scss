@@ -8,11 +8,11 @@
   line-height: $secondary-line-height;
 
   h1 {
+    @include header-1-style;
+
     margin-top: 30px;
     margin-bottom: 40px;
     margin-left: 20px;
-    font-size: 25px;
-    font-weight: normal;
 
     @include media-query( $on-mobile ) {
       margin-top: 20px;
@@ -20,18 +20,14 @@
   }
 
   h2 {
-    color: #454545;
-    font-size: 18px;
-    font-weight: bold;
+    @include header-2-style;
 
     margin-top: 20px;
     margin-left: 20px;
   }
 
   h3 {
-    color: $header-color;
-    font-size: 16px;
-    font-weight: bold;
+    @include header-3-style;
 
     margin-top: 20px;
     margin-left: 20px;
@@ -49,11 +45,12 @@
   ul {
     list-style-type: none;
     padding: 0px;
-    margin-left: 20px;
+    margin-left: 40px;
+    text-indent: -20px;
   }
 
   li b {
-    font-weight: bold;
+    color: blue;
   }
 
   .tabs {

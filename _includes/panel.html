@@ -128,10 +128,10 @@
     for( var section_index = filtered_list.length - 1; section_index >= 0; section_index-- ) {
       var section = filtered_list[section_index];
 
-      for( var chapter_index = section['contents'].length - 1; chapter_index >= 0; chapter_index-- ) {
+      for( var chapter_index = ('contents' in section ? section['contents'].length - 1 : -1); chapter_index >= 0; chapter_index-- ) {
         var chapter = section['contents'][chapter_index];
 
-        for( var page_index = chapter['contents'].length - 1; page_index >= 0; page_index-- ) {
+        for( var page_index = ('contents' in chapter ? chapter['contents'].length - 1 : -1); page_index >= 0; page_index-- ) {
           var page = chapter['contents'][page_index];
           var res = page['title'].match( exp );
 
@@ -145,12 +145,12 @@
           }
         }
 
-        if( chapter['contents'].length <= 0 ) {
+        if( 'contents' in chapter ? chapter['contents'].length <= 0 : true ) {
           section['contents'].splice( chapter_index, 1 );
         }
       }
 
-      if( section['contents'].length <= 0 ) {
+      if( 'contents' in section ? section['contents'].length <= 0 : true ) {
         filtered_list.splice( section_index, 1 );
       }
     }

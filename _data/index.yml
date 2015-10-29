@@ -20,12 +20,13 @@
         - path: /automation/big_picture.adoc
 - title: Git
   contents:
-    - title: FAQ
+    - title: FAQ and Helpful Hints
       contents:
         - path: /git/stories.md
-- title: Core Engineering
+        - path: /git/cool_commands.md
+- title: Support
   contents:
-    - title: Documentation
+    - title: Supportability Documents
       contents:
         - path: /core_docs
-          title: Supportability Docs
+          title: Gollum Documentation

@@ -3,12 +3,6 @@ title: Types of Testing
 authors:
   - name: Eric Terry
     email: Eric_Terry@McAfee.com
-  - name: Nathan Bitikofer
-    email: Nathan_Bitikofer@McAfee.com
-  - name: Matt Meng
-    email: matt.meng@intel.com
-  - name: Matt Hulse
-    email: Matt_Hulse@McAfee.com
 layout: page
 ---
 

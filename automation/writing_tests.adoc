@@ -3,12 +3,10 @@ title: Writing Tests
 authors:
   - name: Eric Terry
     email: Eric_Terry@McAfee.com
-  - name: Nathan Bitikofer
-    email: Nathan_Bitikofer@McAfee.com
-  - name: Matt Meng
-    email: matt.meng@intel.com
   - name: Matt Hulse
     email: Matt_Hulse@McAfee.com
+  - name: Dave Handy
+    email: David.Handy@Intel.com
 layout: page
 ---
 
@@ -226,12 +224,23 @@ end.
 
 ==== Perl
 
-
 NOTE: This section is not yet written.
 
 == Writing system tests
 
-NOTE: This section is not yet written.
+* Don't directly delete all records from any table using SQL
+* Don't indirectly delete all records through an API
+* Don't assume the box is a fresh ISO
+* Only assert for things that the test addes/changes
+* Make sure to delete what you create using setup/teardown or ensure blocks
+* Create your own user/group to run the test and then remove that user/group at the end
+* Don't kill or restart processes like cpservice or dbservice
+* Don't reboot the box or take down services like SSH
+* Use the "Faker" gem to generate any strings you are using. Avoid hard coding strings for things like names and descriptions.
+* Don't hard code or assume there is only one ESM or only certain devices keyed to the box. Rather query the IPSID or devices when calling things that require that input.
+* Don't assume you are running against a local ESM, all-in-one, or ETM
+* Use one Esm/NitroView instance per user for testing api calls accross multiple sessions
+* Don't assume you are the only user logged into the box
 
 == Writing e2e tests
 
