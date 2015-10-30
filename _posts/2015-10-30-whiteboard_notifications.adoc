@@ -3,7 +3,8 @@ title: Whiteboard Notifications
 authors:
   - name: David Handy
     email: David.Handy@intel.com
-layout: page
+layout: post
+categories: rfc whiteboard
 ---
 
 :page-layout: base
@@ -23,12 +24,38 @@ layout: page
 
 == Introduction
 Whiteboard currently runs our suite of system tests against every build of 
-select Jenkins projects. Authenticated users can log into the whiteboard UI and
-view the results of completed test runs. Additionally, emails are sent when a
-test run completes, summarizing the test results. These emails are sent out to
-a fairly static list of people on each run. The purpose of this document is to
-identify what information should be sent in notifications, who should receive
-them, and when the notifications should be sent.
+select Jenkins projects. Users can already view the results of completed test
+runs in the whiteboard UI. Additionally, emails are sent when a test run
+completes, summarizing the test results. These emails are sent out to a fairly
+static list of people on each run. The purpose of this document is to identify
+what information should be sent in notifications, who should receive them, and
+when the notifications should be sent.
+
+== Summary 
+
+This document will detail a system for notifying engineers and other interested
+parties about the status of test runs. When a test transitions from working to
+broken, all engineers who committed to the project between the working and the
+broken build will receive emails stating that they may have broken the build.
+They will continue to receive these emails each build until the broken tests
+are fixed. In addition, there will be a system allowing people to subscribe to
+test results with the following parameters:
+
+* What tests do I care about?
+** Specific branches
+** Specific test tags
+* What do I want to see?
+** Specific test results (what tests are broken? what is their output?)
+** Overall test run summary
+** Trends of test results over time
+** Custom templates (when the above options don't leave you feeling satisfied)
+* When do I want a notification?
+** Every build
+** Only when the test run fails
+** Only when the test run changes state
+*** A previously working test breaks
+*** A previously broken test is fixed
+*** When either of the above occurs
 
 == Who Should Recieve Notifications?
 
@@ -53,7 +80,7 @@ section "What Information Should be Included in Notifications?"), as well
 as selecting which branches they want notifications about, and whether they
 only want information about tests associated with certaion tags.
 
-NOTE: The nofifications to committers from the previous section will receive 
+NOTE: The notifications to committers from the previous section will receive 
 emails regardless of their settings in this system.
 
 == What Information Should be Included in Notifications?
@@ -83,7 +110,7 @@ specific issues detected.
 
 === Trends of Test Runs Over Time
 
-Trends of test runs over time will contain the same numbers are the overall
+Trends of test runs over time will contain the same numbers as the overall
 result summary, but will display trends indicating the change in these numbers
 over time. This type of information is relevant to those who are asking
 questions like "Is [insert practice or tool] making a positive difference in
@@ -112,4 +139,5 @@ when it transitions from bad to good (when it is fixed), or both.
 
 NOTE: Those who were identified as potential committers of broken code will
 automatically receive notifications every build until the tests that 
-transitioned from working to broken that build are all again passing.
+transitioned from working to broken in the original build are all again 
+passing.
