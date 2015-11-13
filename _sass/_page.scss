@@ -143,6 +143,8 @@
   }
 
   dl {
+    padding-left: 14px;
+
     dt {
       font-weight: bold;
       line-height: $base-line-height;
@@ -201,5 +203,15 @@
     top: 56px;
     width: 100%;
     height: calc(100% - 56px);
+  }
+}
+
+@media print {
+  #viewer {
+    position: static;
+    overflow: visible;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
   }
 }
