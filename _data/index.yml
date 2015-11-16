@@ -24,6 +24,11 @@
       contents:
         - path: /git/stories.md
         - path: /git/cool_commands.md
+- title: Whiteboard
+  contents:
+    - title: Basics
+      contents:
+        - path: /whiteboard/topic_branches.md
 - title: Support
   contents:
     - title: Supportability Documents
