@@ -1,5 +1,5 @@
 ---
-title: Gated Definition of Done Review
+title: Gated Definition of Done Review RFC
 authors:
   - name: JT Dewey
     email: jt.dewey@intel.com
@@ -7,7 +7,7 @@ authors:
     email: matt.meng@intel.com
 layout: post
 categories: rfc dod quality
-date:   2015-11-5 12:00:00
+date:   2015-11-18 12:00:00
 ---
 
 ![Gated DoD Review](/files/gates.png)
