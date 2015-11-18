@@ -10,6 +10,8 @@ categories: rfc dod quality
 date:   2015-11-18 12:00:00
 ---
 
+To discuss this RFC, please visit [https://discourse.ida.lab/t/gated-definition-of-done-review-rfc/55/1](https://discourse.ida.lab/t/gated-definition-of-done-review-rfc/55/1).
+
 ![Gated DoD Review](/files/gates.png)
 
 ### Vision
