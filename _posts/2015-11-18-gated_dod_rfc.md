@@ -101,7 +101,7 @@ This gate gives the team an opportunity to have their work evaluated by a peer a
 
 #### Responsibilities
 
-1. Tech Leads can meet together at a scheduled time in an open format to resolve these merge requests together.
+1. Mentors can meet together at a scheduled time in an open format to resolve these merge requests together.
 2. Ensures completeness of code changes and tests.
 3. Reviews Areas of Impact Report.
 4. Validates definition of done completion.
@@ -115,7 +115,7 @@ This gate gives the team an opportunity to have their work evaluated by a peer a
 
 #### Deliverables
 
-* Completed authorization from Tech Lead/Architect
+* Completed authorization from the Mentor
 * Merge Request assigned to Release Team
 * Record of Gate 3 completion in VersionOne
 
@@ -131,7 +131,7 @@ This gate allows the Release Team to validate that everything has been taken car
 
 1. Validate 100% definition of done completion.
 2. Validate all automation passes.
-3. Validate sign-off from Product Owner and Tech Lead/Architect.
+3. Validate sign-off from Product Owner and Mentors.
 4. Perform the merge.
 5. Record the story in the release notes.
 6. Record the completion of Gate 4 in the story or defect.
@@ -179,11 +179,11 @@ This template is generic and should be customized to fit the story.  Where appro
 #### Definition of Done
 
 - [ ] Documentation
-  - [ ] Design Review (*Architects, Tech Leads and Team*)
-  - [ ] Acceptance Criteria (*Architects, Tech Leads and Team*)
-  - [ ] Area of Impact Report (*Architects, Tech Leads and Team*)
+  - [ ] Design Review (*Architects, Mentors and Team*)
+  - [ ] Acceptance Criteria (*Architects, Mentors and Team*)
+  - [ ] Area of Impact Report (*Architects, Mentors and Team*)
   - [ ] Supportability Documents (*Team*)
-- [ ] Formal Code Review (Includes reviewing automation. *Architects and Tech Leads*)
+- [ ] Formal Code Review (Includes reviewing automation. *Architects and Mentors*)
 - [ ] Automation Passes (*All*)
   - [ ] *A customized list of new or modified automation for this epic goes here.*
   - [ ] *Manually tested where necessary.  All manual tests are approved here.*
@@ -195,8 +195,8 @@ This template is generic and should be customized to fit the story.  Where appro
 This template is generic and should be customized to fit the story.  Where appropriate, adding and removing items is encouraged.
 
 {% highlight bash %}
-- [ ] Area of Impact Report (*Architects, Tech Leads and Team*)
-- [ ] Formal Code Review (Includes reviewing automation. *Architects and Tech Leads*)
+- [ ] Area of Impact Report (*Architects, Mentors and Team*)
+- [ ] Formal Code Review (Includes reviewing automation. *Architects and Mentors*)
 - [ ] Automation Passes (*All*)
   - [ ] *A customized list of new or modified automation for this epic goes here.*
   - [ ] *Manually tested where necessary.  All manual tests are approved here.*
