@@ -33,7 +33,7 @@ Consider several factors that are important when discussing the gated DoD review
 
 #### Solution
 
-The process we propose attempts to split the burden of work among several parties such that everyone shares in the added burden of the process.  There are four gates that must be passed by each story or defect before it can finished and merged into a mainline branch.  If any gate is not completed, the story or defect is reevaluated and does not move forward.
+The process we propose attempts to split the burden of work among several parties such that everyone shares in the added burden of the process.  There are four gates that must be passed by each story or defect before it can be finished and merged into a mainline branch.  If any gate is not completed, the story or defect is reevaluated and does not move forward.
 
 ### Gate 1: Team Planning
 
