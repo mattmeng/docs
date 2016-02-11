@@ -65,6 +65,7 @@ This document describes several stories in an attempt to help Developers and Rel
   * [Close a Merge Request in Gitlab](#close-a-merge-request-in-gitlab)
   * [Cherry-pick a Fix onto a Target Branch](#cherry-pick-a-fix-onto-a-target-branch)
   * [Protect a Branch](#protect-a-branch)
+* [Submodule Basics](#submodule-basics)
 
 ## Development
 
@@ -358,3 +359,18 @@ This can only be done by a `Master`.
 4. Select the branch you want to protect.
 5. If you would like to allow `Developers` to push to this branch, check **Developers can push**.
 6. Click **Protect**.
+
+## Submodule Basics
+
+### Great News!
+One of the benefits of working with a technology like git is that it is widely used and supported. This means that it is easy to find great support and answers about any questions you may have on the internet. Google is your friend. That being said, here is a compilation of a few sources that should help you master git submodules.
+
+### Adding, Using, Removing and Updating Submodules
+An overview of basic git submodule actions can be found [here](https://chrisjean.com/git-submodules-adding-using-removing-and-updating/).
+
+### Getting `reference is not a tree` error?
+Try this:
+```bash
+git submodule sync
+git submodule update
+```
