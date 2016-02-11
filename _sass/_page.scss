@@ -52,20 +52,37 @@
 
   h1 {
     margin-top: 10px;
+    margin-bottom: 0px;
 
     @include header-1-style;
   }
 
   h2 {
     margin-top: 40px;
+    margin-bottom: 0px;
 
     @include header-2-style;
   }
 
   h3 {
     margin-top: 30px;
+    margin-bottom: 0px;
 
     @include header-3-style;
+  }
+
+  h4 {
+    margin-top: 20px;
+    margin-bottom: 0px;
+
+    @include header-4-style;
+  }
+
+  h5 {
+    margin-top: 20px;
+    margin-bottom: 0px;
+
+    @include header-5-style;
   }
 
   div {

@@ -54,20 +54,33 @@ $on-large:          1600px;
 }
 
 @mixin header-1-style() {
-  font-size: $base-font-size + 6;
+  font-size: $base-font-size + 8;
   font-weight: normal;
   color: #454545;
 }
 
 @mixin header-2-style() {
-  font-size: $base-font-size + 4;
+  font-size: $base-font-size + 6;
   font-weight: bold;
   color: $header-color;
 }
 
 @mixin header-3-style() {
+  font-size: $base-font-size + 4;
+  font-weight: bold;
+}
+
+@mixin header-4-style() {
   font-size: $base-font-size + 2;
   font-weight: bold;
+  font-style: italic;
+  color: $header-color;
+}
+
+@mixin header-5-style() {
+  font-size: $base-font-size + 2;
+  font-weight: bold;
+  font-style: italic;
 }
 
 // Import partials from `sass_dir` (defaults to `_sass`)
