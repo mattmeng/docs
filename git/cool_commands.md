@@ -25,3 +25,14 @@ The following commands an aliases can be used enhance your use of Git.  Aliases 
   <dt><code>git log --no-merges --first-parent</code></dt>
   <dd>Shows just the commits to the current branch.  However, the history goes on beyond when the branch was created.</dd>
 </dl>
+
+## Submodules
+Ever wonder what commit the submodules on you current branch are at? Here are two git aliases that you can add to your `.gitconfig` that will help with that. Simply use `git sc` or `git scd` (if HEAD is detached, and not on a branch), and you'll see what commits your submodules are at.
+
+```
+sc = !git ls-tree -r $( git branch | awk '{print $2}') | grep ^160000 | awk {'"'"'printf (\"%5s\\t%s\\n\", $4, $3)'"'"'}
+```
+
+```
+scd = !git ls-tree -r $( git branch | awk '{print $5}' | sed s'/.$//') | grep ^160000 | awk {'"'"'printf (\"%5s\\t%s\\n\", $4, $3)'"'"'}
+```
