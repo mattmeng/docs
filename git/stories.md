@@ -370,7 +370,9 @@ An overview of basic git submodule actions can be found [here](https://chrisjean
 
 ### Getting `reference is not a tree` error?
 Try this:
-```bash
+```
 git submodule sync
+```
+```
 git submodule update
 ```
